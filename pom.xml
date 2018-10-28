@@ -24,6 +24,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>transport</module>
+        <module>application</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -38,9 +39,16 @@
         <netty-all.version>4.1.29.Final</netty-all.version>
         <hutool.version>4.1.6</hutool.version>
         <spring-boot.version>2.0.5.RELEASE</spring-boot.version>
+        <lombok.version>1.16.18</lombok.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <logback.version>1.2.3</logback.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>1.9.5</mockito.version>
     </properties>
 
 
+
+    <dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>io.netty</groupId>
@@ -70,22 +78,97 @@
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-crypto</artifactId>
             <version>${hutool.version}</version>
         </dependency>
     </dependencies>
+    </dependencyManagement>
 
 
 
     <build>
+        <pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.0.0</version>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
             </plugin>
         </plugins>
+        </pluginManagement>
     </build>
 
 
