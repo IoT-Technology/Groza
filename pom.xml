@@ -25,6 +25,7 @@
     <modules>
         <module>transport</module>
         <module>application</module>
+        <module>common</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -35,6 +36,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <main.dir>${basedir}</main.dir>
         <java.version>1.8</java.version>
         <netty-all.version>4.1.29.Final</netty-all.version>
         <hutool.version>4.1.6</hutool.version>
@@ -52,12 +54,17 @@
 
     <dependencyManagement>
     <dependencies>
+
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>${netty-all.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
