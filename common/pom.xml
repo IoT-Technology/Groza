@@ -25,7 +25,22 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.sanshengshui</groupId>
     <artifactId>common</artifactId>
+    <packaging>pom</packaging>
 
+    <name>Groza Server Commons</name>
+    <url>https://sanshengshui.github.io/</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main.dir>${basedir}/..</main.dir>
+    </properties>
+
+    <modules>
+        <module>data</module>
+        <module>message</module>
+        <module>transdata</module>
+    </modules>
 
 </project>
