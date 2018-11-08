@@ -1,6 +1,7 @@
 package com.sanshengshui.server.transport.mqtt;
 
 
+import com.sanshengshui.server.transport.mqtt.protocol.ProtocolProcess;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +14,7 @@ import io.netty.handler.codec.mqtt.MqttDecoder;
 import io.netty.handler.codec.mqtt.MqttEncoder;
 import io.netty.util.ResourceLeakDetector;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -44,6 +46,8 @@ public class MqttTransprotService {
     @Value("${mqtt.netty.max_payload_size}")
     private Integer maxPayloadSize;
 
+    @Autowired
+    private ProtocolProcess protocolProcess;
 
     private Channel serverChannel;
     private EventLoopGroup bossGroup;
@@ -68,12 +72,12 @@ public class MqttTransprotService {
                         ChannelPipeline pipeline = socketChannel.pipeline();
                         pipeline.addLast("decoder", new MqttDecoder(maxPayloadSize));
                         pipeline.addLast("encoder", MqttEncoder.INSTANCE);
+                        MqttTransportHandler handler = new MqttTransportHandler(protocolProcess);
+                        pipeline.addLast(handler);
                     }
                 });
 
         serverChannel = b.bind(host, port).sync().channel();
-
-
         log.info("Mqtt transport started!");
     }
 
