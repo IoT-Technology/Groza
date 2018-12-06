@@ -26,6 +26,7 @@
         <module>transport</module>
         <module>application</module>
         <module>common</module>
+        <module>dao</module>
     </modules>
     <packaging>pom</packaging>
 

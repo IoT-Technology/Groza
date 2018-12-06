@@ -1,3 +1,6 @@
+# Device communication protocol parameters
+http:
+  request_timeout: 60000
 # MQTT server parameters
 mqtt:
   # Enable/disable mqtt transport protocol.
