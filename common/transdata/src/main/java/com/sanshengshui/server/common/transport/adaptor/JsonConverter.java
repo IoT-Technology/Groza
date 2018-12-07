@@ -2,9 +2,7 @@ package com.sanshengshui.server.common.transport.adaptor;
 
 import com.google.gson.*;
 import com.sanshengshui.server.common.data.kv.*;
-import com.sanshengshui.server.common.msg.core.AttributesUpdateRequest;
-import com.sanshengshui.server.common.msg.core.BasicAttributesUpdateRequest;
-import com.sanshengshui.server.common.msg.core.BasicRequest;
+import com.sanshengshui.server.common.msg.core.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +17,34 @@ public class JsonConverter {
     private static final Gson GSON = new Gson();
     public static final String CAN_T_PARSE_VALUE = "Can't parse value: ";
 
+    public static TelemetryUploadRequest convertToTelemetry(JsonElement jsonObject) throws JsonSyntaxException {
+        return convertToTelemetry(jsonObject, BasicRequest.DEFAULT_REQUEST_ID);
+    }
+
     public static AttributesUpdateRequest convertToAttributes(JsonElement element) {
         return convertToAttributes(element, BasicRequest.DEFAULT_REQUEST_ID);
+    }
+
+    public static TelemetryUploadRequest convertToTelemetry(JsonElement jsonObject, int requestId) throws JsonSyntaxException {
+        return convertToTelemetry(jsonObject, System.currentTimeMillis(), requestId);
+    }
+
+    private static TelemetryUploadRequest convertToTelemetry(JsonElement jsonObject, long systemTs, int requestId) throws JsonSyntaxException {
+        BasicTelemetryUploadRequest request = new BasicTelemetryUploadRequest(requestId);
+        if (jsonObject.isJsonObject()) {
+            parseObject(request, systemTs, jsonObject);
+        } else if (jsonObject.isJsonArray()) {
+            jsonObject.getAsJsonArray().forEach(je -> {
+                if (je.isJsonObject()) {
+                    parseObject(request, systemTs, je.getAsJsonObject());
+                } else {
+                    throw new JsonSyntaxException(CAN_T_PARSE_VALUE + je);
+                }
+            });
+        } else {
+            throw new JsonSyntaxException(CAN_T_PARSE_VALUE + jsonObject);
+        }
+        return request;
     }
 
     public static AttributesUpdateRequest convertToAttributes(JsonElement element, int requestId) {
@@ -66,6 +90,29 @@ public class JsonConverter {
             } catch (NumberFormatException e) {
                 throw new JsonSyntaxException("Big integer values are not supported!");
             }
+        }
+    }
+
+    private static void parseObject(BasicTelemetryUploadRequest request, long systemTs, JsonElement jsonObject) {
+        JsonObject jo = jsonObject.getAsJsonObject();
+        if (jo.has("ts") && jo.has("values")) {
+            parseWithTs(request, jo);
+        } else {
+            parseWithoutTs(request, systemTs, jo);
+        }
+    }
+
+    public static void parseWithTs(BasicTelemetryUploadRequest request, JsonObject jo) {
+        long ts = jo.get("ts").getAsLong();
+        JsonObject valuesObject = jo.get("values").getAsJsonObject();
+        for (KvEntry entry : parseValues(valuesObject)) {
+            request.add(ts, entry);
+        }
+    }
+
+    private static void parseWithoutTs(BasicTelemetryUploadRequest request, long systemTs, JsonObject jo) {
+        for (KvEntry entry : parseValues(jo)) {
+            request.add(systemTs, entry);
         }
     }
 
