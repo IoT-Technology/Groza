@@ -3,10 +3,7 @@ package com.sanshengshui.server.transport.mqtt;
 
 import com.sanshengshui.server.transport.mqtt.protocol.ProtocolProcess;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -16,34 +13,33 @@ import io.netty.util.ResourceLeakDetector;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.Date;
 
 /**
  * @author james
  * @date 2018年10月29日 19:33
  */
-@Service("MqttTransportService")
-@ConfigurationProperties(prefix = "mqtt")
+@Component
 @Slf4j
 public class MqttTransprotService {
-    @Value("${mqtt.bind_address}")
+    @Autowired
     private String host;
-    @Value("${mqtt.bind_port}")
+    @Autowired
     private Integer port;
-    @Value("${mqtt.adaptor}")
-    private String adaptorName;
 
-    @Value("${mqtt.netty.leak_detector_level}")
+    @Autowired
     private String leakDetectorLevel;
-    @Value("${mqtt.netty.boss_group_thread_count}")
+    @Autowired
     private Integer bossGroupThreadCount;
-    @Value("${mqtt.netty.worker_group_thread_count}")
+    @Autowired
     private Integer workerGroupThreadCount;
-    @Value("${mqtt.netty.max_payload_size}")
+    @Autowired
     private Integer maxPayloadSize;
 
     @Autowired
@@ -63,9 +59,13 @@ public class MqttTransprotService {
         log.info("Starting MQTT transport server");
         bossGroup = new NioEventLoopGroup(bossGroupThreadCount);
         workerGroup = new NioEventLoopGroup(workerGroupThreadCount);
-        ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup, workerGroup)
+        final ServerBootstrap b = new ServerBootstrap();
+        b
+                .group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG,1024)
+                .childOption(ChannelOption.SO_KEEPALIVE,true)
+                .childOption(ChannelOption.TCP_NODELAY,true)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
@@ -76,9 +76,18 @@ public class MqttTransprotService {
                         pipeline.addLast(handler);
                     }
                 });
+        bind(b,port);
 
-        serverChannel = b.bind(host, port).sync().channel();
-        log.info("Mqtt transport started!");
+    }
+
+    private static void bind(final ServerBootstrap serverBootstrap,final int port){
+        serverBootstrap.bind(port).addListener(future -> {
+            if (future.isSuccess()){
+                log.info(new Date() + ": port[" + port +"] bind successfully!");
+            }else {
+                log.info(new Date() + ": port[" + port + "] bind failed!");
+            }
+        });
     }
 
     @PreDestroy
