@@ -23,3 +23,6 @@ coap:
   bind_port: 5683
   adaptor: JsonCoapAdaptor
   timeout: 10000
+
+database:
+  type: sql # sql OR mongodb
