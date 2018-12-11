@@ -13,7 +13,7 @@
     <artifactId>message</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza Server Common Messages</name>
+    <name>Groza :: Server :: Common :: Message</name>
     <url>https://sanshengshui.github.io/</url>
 
     <properties>

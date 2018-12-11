@@ -28,7 +28,7 @@
     <artifactId>coap</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza COAP transport</name>
+    <name>Groza :: Server :: Transport :: COAP</name>
     <url>https://groza.io</url>
 
     <dependencies>

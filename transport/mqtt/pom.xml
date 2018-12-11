@@ -29,7 +29,7 @@
     <artifactId>mqtt</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza MQTT Transport</name>
+    <name>Groza :: Server :: Transport :: MQTT</name>
     <url>https://groza.io</url>
 
     <properties>

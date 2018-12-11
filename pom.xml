@@ -30,7 +30,7 @@
     </modules>
     <packaging>pom</packaging>
 
-    <name>Groza</name>
+    <name>Groza :: Server</name>
     <url>https://sanshengshui.github.io/</url>
     <inceptionYear>2018</inceptionYear>
 

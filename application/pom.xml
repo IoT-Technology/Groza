@@ -27,7 +27,7 @@
     <artifactId>application</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza Server Application</name>
+    <name>Groza :: Server :: Application</name>
     <url>https://groza.io</url>
     <description>Groza</description>
 

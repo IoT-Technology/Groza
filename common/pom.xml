@@ -29,7 +29,7 @@
     <artifactId>common</artifactId>
     <packaging>pom</packaging>
 
-    <name>Groza Server Commons</name>
+    <name>Groza :: Server :: Common</name>
     <url>https://sanshengshui.github.io/</url>
 
     <properties>

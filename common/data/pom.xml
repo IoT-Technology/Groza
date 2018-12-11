@@ -24,7 +24,7 @@
         <groupId>com.sanshengshui</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <name>Groza Server Common Data</name>
+    <name>Groza :: Server :: Common :: Data</name>
     <groupId>com.sanshengshui.common</groupId>
     <artifactId>data</artifactId>
     <packaging>jar</packaging>

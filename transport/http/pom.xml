@@ -28,7 +28,7 @@
     <artifactId>http</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza HTTP Transport</name>
+    <name>Groza :: Server :: Transport :: HTTP</name>
     <url>https://Groza.io</url>
 
     <properties>

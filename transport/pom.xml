@@ -33,6 +33,8 @@
     <artifactId>transport</artifactId>
     <packaging>pom</packaging>
 
+    <name>Groza :: Server :: Transport </name>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

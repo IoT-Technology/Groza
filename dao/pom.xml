@@ -29,6 +29,10 @@
     <artifactId>dao</artifactId>
     <packaging>jar</packaging>
 
+    <name>Groza :: Server :: Dao</name>
+    <url>https://sanshengshui.github.io/</url>
+    <description>开源物联网平台 - 物联网解决方案的设备管理，数据收集，处理和可视化</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

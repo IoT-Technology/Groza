@@ -29,7 +29,7 @@
     <artifactId>transdata</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza Server Common Transport components</name>
+    <name>Groza :: Server :: Common :: Transport components</name>
     <url>https://thingsboard.io</url>
 
     <properties>
