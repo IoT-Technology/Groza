@@ -5,5 +5,5 @@ package com.sanshengshui.server.common.data;
  * @date 18-12-6 下午3:30
  */
 public enum EntityType {
-    DEVICE;
+    TENANT,CUSTOMER,DEVICE;
 }
