@@ -26,3 +26,10 @@ coap:
 
 database:
   type: sql # sql OR mongodb
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: james
