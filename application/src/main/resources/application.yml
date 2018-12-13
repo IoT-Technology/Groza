@@ -33,3 +33,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: james
+
+mybatis:
+  config-location:
+    classpath: mybatis.xml

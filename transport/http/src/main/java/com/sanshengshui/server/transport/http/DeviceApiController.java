@@ -4,7 +4,10 @@ import com.google.gson.JsonParser;
 import com.sanshengshui.server.common.data.kv.AttributeKvEntry;
 import com.sanshengshui.server.common.data.kv.KvEntry;
 import com.sanshengshui.server.common.transport.adaptor.JsonConverter;
+import com.sanshengshui.server.dao.model.sql.AttributeKvEntity;
+import com.sanshengshui.server.dao.sql.attributes.AttributeKvRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,8 @@ import java.util.Set;
 @RequestMapping("/api/v1")
 @Slf4j
 public class DeviceApiController {
+    @Autowired
+    private AttributeKvRepository attributeKvRepository;
 
     @RequestMapping(value = "/{deviceToken}/attributes",method = RequestMethod.POST)
     public DeferredResult<ResponseEntity> postDeviceAttributes(
@@ -49,6 +54,19 @@ public class DeviceApiController {
             }
         }
         return responseWriter;
+
+    }
+
+    @RequestMapping(value = "/testAttribute",method = RequestMethod.POST)
+    public void testAttributeKvEntity(@RequestParam String attributeType,
+                                      @RequestParam String attributeKey,
+                                      @RequestParam String strValue){
+        AttributeKvEntity attributeKvEntity = new AttributeKvEntity();
+        attributeKvEntity.setAttributeType(attributeType);
+        attributeKvEntity.setAttributeKey(attributeKey);
+        attributeKvEntity.setStrValue(strValue);
+        attributeKvRepository.save(attributeKvEntity);
+
 
     }
 
