@@ -16,7 +16,7 @@ public interface AttributesDao {
 
     ListenableFuture<Optional<AttributeKvEntry>> find(EntityId entityId, String attributeType, String attributeKey);
 
-    ListenableFuture<List<AttributeKvEntry>> find(EntityId entityId, String attributeType, Collection<String> attributeKey);
+    ListenableFuture<List<AttributeKvEntry>> find(EntityId entityId, String attributeType, Collection<String> attributeKeys);
 
     ListenableFuture<List<AttributeKvEntry>> findAll(EntityId entityId, String attributeType);
 

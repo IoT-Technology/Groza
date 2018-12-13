@@ -1,7 +1,9 @@
 package com.sanshengshui.server.dao.sql.attributes;
 
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.sanshengshui.server.common.data.UUIDConverter;
 import com.sanshengshui.server.common.data.id.EntityId;
 import com.sanshengshui.server.common.data.kv.AttributeKvEntry;
 import com.sanshengshui.server.dao.DaoUtil;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.sanshengshui.server.common.data.UUIDConverter.fromTimeUUID;
 
@@ -41,13 +44,25 @@ public class MybatisAttributeDao extends MybatisAbstractDaoListeningExecutorServ
     }
 
     @Override
-    public ListenableFuture<List<AttributeKvEntry>> find(EntityId entityId, String attributeType, Collection<String> attributeKey) {
-        return null;
+    public ListenableFuture<List<AttributeKvEntry>> find(EntityId entityId, String attributeType, Collection<String> attributeKeys) {
+        List<AttributeKvCompositeKey> compositeKeys =
+                attributeKeys
+                .stream()
+                .map(attributeKey ->
+                        getAttributeKvCompositeKey(entityId,attributeType,attributeKey))
+                .collect(Collectors.toList());
+        return Futures.immediateFuture(
+                DaoUtil.convertDataList(Lists.newArrayList(attributeKvRepository.findAll(compositeKeys))));
     }
 
     @Override
     public ListenableFuture<List<AttributeKvEntry>> findAll(EntityId entityId, String attributeType) {
-        return null;
+        return Futures.immediateFuture(
+                DaoUtil.convertDataList(Lists.newArrayList(
+                        attributeKvRepository.findAllByEntityTypeAndEntityIdAndAttributeType(
+                                entityId.getEntityType(),
+                                UUIDConverter.fromTimeUUID(entityId.getId()),
+                                attributeType))));
     }
 
     @Override
@@ -70,7 +85,21 @@ public class MybatisAttributeDao extends MybatisAbstractDaoListeningExecutorServ
 
     @Override
     public ListenableFuture<List<Void>> removeAll(EntityId entityId, String attributeType, List<String> keys) {
-        return null;
+        List<AttributeKvEntity> entitiesToDelete = keys
+                .stream()
+                .map(key ->{
+                    AttributeKvEntity entityToDelete = new AttributeKvEntity();
+                    entityToDelete.setEntityType(entityId.getEntityType());
+                    entityToDelete.setEntityId(fromTimeUUID(entityId.getId()));
+                    entityToDelete.setAttributeType(attributeType);
+                    entityToDelete.setAttributeKey(key);
+                    return entityToDelete;
+                }).collect(Collectors.toList());
+
+        return service.submit(() -> {
+            attributeKvRepository.delete(entitiesToDelete);
+            return null;
+        });
     }
 
     private AttributeKvCompositeKey getAttributeKvCompositeKey(EntityId entityId,String attributeType,String attributeKey){

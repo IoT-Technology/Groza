@@ -9,7 +9,8 @@ import lombok.EqualsAndHashCode;
  * @author james mu
  * @date 18-12-11 上午10:28
  */
-public class Device implements HasName,HasTenantId,HasCustomerId {
+@EqualsAndHashCode(callSuper = true)
+public class Device extends SearchTextBasedWithAdditionalInfo<DeviceId> implements HasName,HasTenantId,HasCustomerId {
 
     private static final long serialVersionUID = 2807343040519543363L;
 
@@ -22,17 +23,18 @@ public class Device implements HasName,HasTenantId,HasCustomerId {
         super();
     }
 
-
+    public Device(DeviceId id) {
+        super(id);
+    }
 
     public Device(Device device) {
+        super(device);
         this.tenantId = device.getTenantId();
         this.customerId = device.getCustomerId();
         this.name = device.getName();
         this.type = device.getType();
     }
 
-
-    @Override
     public TenantId getTenantId() {
         return tenantId;
     }
@@ -41,7 +43,6 @@ public class Device implements HasName,HasTenantId,HasCustomerId {
         this.tenantId = tenantId;
     }
 
-    @Override
     public CustomerId getCustomerId() {
         return customerId;
     }
@@ -68,6 +69,11 @@ public class Device implements HasName,HasTenantId,HasCustomerId {
     }
 
     @Override
+    public String getSearchText() {
+        return getName();
+    }
+
+    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Device [tenantId=");
@@ -78,6 +84,12 @@ public class Device implements HasName,HasTenantId,HasCustomerId {
         builder.append(name);
         builder.append(", type=");
         builder.append(type);
+        builder.append(", additionalInfo=");
+        builder.append(getAdditionalInfo());
+        builder.append(", createdTime=");
+        builder.append(createdTime);
+        builder.append(", id=");
+        builder.append(id);
         builder.append("]");
         return builder.toString();
     }
