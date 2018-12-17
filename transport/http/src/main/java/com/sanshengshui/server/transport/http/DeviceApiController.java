@@ -1,11 +1,18 @@
 package com.sanshengshui.server.transport.http;
 
+import com.datastax.driver.core.utils.UUIDs;
 import com.google.gson.JsonParser;
+import com.sanshengshui.server.common.data.DataConstants;
+import com.sanshengshui.server.common.data.id.DeviceId;
 import com.sanshengshui.server.common.data.kv.AttributeKvEntry;
+import com.sanshengshui.server.common.data.kv.BaseAttributeKvEntry;
 import com.sanshengshui.server.common.data.kv.KvEntry;
+import com.sanshengshui.server.common.data.kv.StringDataEntry;
 import com.sanshengshui.server.common.transport.adaptor.JsonConverter;
+import com.sanshengshui.server.dao.attributes.AttributesService;
 import com.sanshengshui.server.dao.model.sql.AttributeKvEntity;
 import com.sanshengshui.server.dao.sql.attributes.AttributeKvRepository;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author james mu
@@ -25,7 +34,7 @@ import java.util.Set;
 @Slf4j
 public class DeviceApiController {
     @Autowired
-    private AttributeKvRepository attributeKvRepository;
+    private AttributesService attributesService;
 
     @RequestMapping(value = "/{deviceToken}/attributes",method = RequestMethod.POST)
     public DeferredResult<ResponseEntity> postDeviceAttributes(
@@ -58,15 +67,11 @@ public class DeviceApiController {
     }
 
     @RequestMapping(value = "/testAttribute",method = RequestMethod.POST)
-    public void testAttributeKvEntity(@RequestParam String attributeType,
-                                      @RequestParam String attributeKey,
-                                      @RequestParam String strValue){
-        AttributeKvEntity attributeKvEntity = new AttributeKvEntity();
-        attributeKvEntity.setAttributeType(attributeType);
-        attributeKvEntity.setAttributeKey(attributeKey);
-        attributeKvEntity.setStrValue(strValue);
-        attributeKvRepository.save(attributeKvEntity);
-
+    public void testAttributeKvEntity() throws ExecutionException, InterruptedException {
+        DeviceId deviceId = new DeviceId(UUIDs.timeBased());
+       KvEntry attrNewValue = new StringDataEntry("attribute1","value2");
+       AttributeKvEntry attrNew = new BaseAttributeKvEntry(attrNewValue,73L);
+        attributesService.save(deviceId, DataConstants.CLIENT_SCOPE, Collections.singletonList(attrNew)).get();
 
     }
 

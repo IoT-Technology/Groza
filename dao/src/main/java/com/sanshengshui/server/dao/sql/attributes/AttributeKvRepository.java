@@ -23,7 +23,8 @@ public interface AttributeKvRepository {
 
     List<AttributeKvEntity> findAll(List<AttributeKvCompositeKey> attributeKvCompositeKeyList);
 
-    @Insert("insert into attribute_kv(attribute_type,attribute_key,str_v) values(#{attributeType},#{attributeKey},#{strValue})")
+    @Insert("insert into attribute_kv(entity_type,entity_id,attribute_type,attribute_key,bool_v,str_v,long_v,dbl_v,last_update_ts) " +
+            "values(#{entityType},#{entityId},#{attributeType},#{attributeKey},#{booleanValue},#{strValue},#{longValue},#{doubleValue},#{lastUpdateTs})")
     int save(AttributeKvEntity attributeKvEntity);
 
     int delete(List<AttributeKvEntity> entitiesToDelete);
