@@ -1,6 +1,5 @@
-package com.sanshengshui.server.dao;
+package com.sanshengshui.server.dao.model;
 
-import com.sanshengshui.server.dao.model.BaseEntity;
 
 /**
  * @author james mu
