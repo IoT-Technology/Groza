@@ -39,7 +39,7 @@
     <dependencies>
         <dependency>
             <groupId>com.sanshengshui.common</groupId>
-            <artifactId>transdata</artifactId>
+            <artifactId>transport</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

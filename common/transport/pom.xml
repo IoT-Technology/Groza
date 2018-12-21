@@ -26,7 +26,7 @@
     </parent>
 
     <groupId>com.sanshengshui.common</groupId>
-    <artifactId>transdata</artifactId>
+    <artifactId>transport</artifactId>
     <packaging>jar</packaging>
 
     <name>Groza :: Server :: Common :: Transport components</name>
