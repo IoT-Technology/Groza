@@ -66,7 +66,7 @@ public class DeviceApiController {
     @RequestMapping(value = "/testAttribute",method = RequestMethod.POST)
     public void testAttributeKvEntity() throws ExecutionException, InterruptedException {
         DeviceId deviceId = new DeviceId(UUIDs.timeBased());
-       KvEntry attrNewValue = new StringDataEntry("attribute1","value2");
+       KvEntry attrNewValue = new StringDataEntry("attribute5","value5");
        AttributeKvEntry attrNew = new BaseAttributeKvEntry(attrNewValue,73L);
         attributesService.save(deviceId, DataConstants.CLIENT_SCOPE, Collections.singletonList(attrNew)).get();
 

@@ -7,29 +7,46 @@ import com.sanshengshui.server.common.data.id.DeviceId;
 import com.sanshengshui.server.common.data.id.TenantId;
 import com.sanshengshui.server.dao.BaseSqlEntity;
 import com.sanshengshui.server.dao.SearchTextEntity;
+import com.sanshengshui.server.dao.model.ModelConstants;
+import com.sanshengshui.server.dao.util.mapping.JsonStringType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * @author james mu
  * @date 18-12-13 下午4:10
  */
+@Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
+@TypeDef(name = "json",typeClass = JsonStringType.class)
+@Table(name = ModelConstants.DEVICE_COLUMN_FAMILY_NAME)
 public final class DeviceEntity extends BaseSqlEntity<Device> implements SearchTextEntity<Device> {
 
+    @Column(name = ModelConstants.DEVICE_TENANT_ID_PROPERTY)
     private String tenantId;
 
+    @Column(name = ModelConstants.DEVICE_CUSTOMER_ID_PROPERTY)
     private String customerId;
 
+    @Column(name = ModelConstants.DEVICE_TYPE_PROPERTY)
     private String type;
 
+    @Column(name = ModelConstants.DEVICE_NAME_PROPERTY)
     private String name;
 
+    @Column(name = ModelConstants.SEARCH_TEXT_PROPERTY)
     private String searchText;
 
+    @Type(type = "json")
+    @Column(name = ModelConstants.DEVICE_ADDITIONAL_INFO_PROPERTY)
     private JsonNode additionalInfo;
 
     public DeviceEntity() {

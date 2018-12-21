@@ -10,7 +10,7 @@ import com.sanshengshui.server.dao.DaoUtil;
 import com.sanshengshui.server.dao.attributes.AttributesDao;
 import com.sanshengshui.server.dao.model.sql.AttributeKvCompositeKey;
 import com.sanshengshui.server.dao.model.sql.AttributeKvEntity;
-import com.sanshengshui.server.dao.sql.MybatisAbstractDaoListeningExecutorService;
+import com.sanshengshui.server.dao.sql.JpaAbstractDaoListeningExecutorService;
 import com.sanshengshui.server.dao.util.SqlDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.sanshengshui.server.common.data.UUIDConverter.fromTimeUUID;
 
@@ -30,7 +29,7 @@ import static com.sanshengshui.server.common.data.UUIDConverter.fromTimeUUID;
 @Component
 @Slf4j
 @SqlDao
-public class MybatisAttributeDao extends MybatisAbstractDaoListeningExecutorService implements AttributesDao {
+public class JpaAttributeDao extends JpaAbstractDaoListeningExecutorService implements AttributesDao {
 
     @Autowired
     private AttributeKvRepository attributeKvRepository;
