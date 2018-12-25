@@ -1,5 +1,6 @@
 package com.sanshengshui.server.dao.sql.device;
 
+import com.sanshengshui.server.common.data.UUIDConverter;
 import com.sanshengshui.server.common.data.security.DeviceCredentials;
 import com.sanshengshui.server.dao.DaoUtil;
 import com.sanshengshui.server.dao.device.DeviceCredentialsDao;
@@ -25,12 +26,12 @@ public class JpaDeviceCredentialsDao extends JpaAbstractDao<DeviceCredentialsEnt
 
     @Override
     public DeviceCredentials findByDeviceId(UUID deviceId) {
-        return null;
+        return DaoUtil.getData(deviceCredentialsRepository.findByDeviceId(UUIDConverter.fromTimeUUID(deviceId)));
     }
 
     @Override
     public DeviceCredentials findByCredentialsId(String credentialsId) {
-        return DaoUtil.getData()
+        return DaoUtil.getData(deviceCredentialsRepository.findByCredentialsId(credentialsId));
     }
 
     @Override
@@ -40,6 +41,6 @@ public class JpaDeviceCredentialsDao extends JpaAbstractDao<DeviceCredentialsEnt
 
     @Override
     protected CrudRepository<DeviceCredentialsEntity, String> getCrudRepository() {
-        return null;
+        return deviceCredentialsRepository;
     }
 }
