@@ -18,8 +18,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfiguration {
     @Bean
     public Docket GrozaApi(){
-
-
         return new Docket(DocumentationType.SWAGGER_2)
                 .groupName("Groza")
                 .apiInfo(apiInfo())

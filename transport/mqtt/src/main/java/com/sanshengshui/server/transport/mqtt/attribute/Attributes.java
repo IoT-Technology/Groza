@@ -1,6 +1,5 @@
 package com.sanshengshui.server.transport.mqtt.attribute;
 
-import io.netty.util.AttributeKey;
 
 /**
  * @author james mu
