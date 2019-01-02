@@ -57,6 +57,7 @@
         <mysql.version>8.0.12</mysql.version>
         <cassandra.version>3.5.0</cassandra.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <bouncycastle.version>1.60</bouncycastle.version>
     </properties>
 
 
@@ -244,6 +245,16 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>
     </dependencyManagement>
