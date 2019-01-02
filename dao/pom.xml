@@ -39,6 +39,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.sanshengshui.common</groupId>
             <artifactId>data</artifactId>
         </dependency>
