@@ -3,6 +3,7 @@ package com.sanshengshui.server.dao.device;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sanshengshui.server.common.data.Device;
 import com.sanshengshui.server.common.data.EntitySubtype;
+import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.dao.Dao;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface DeviceDao extends Dao<Device> {
      * @param tenantId the tenantId
      * @return the list of device objects
      */
-    List<Device> findDevicesByTenantId(UUID tenantId);
+    List<Device> findDevicesByTenantId(UUID tenantId, TextPageLink pageLink);
 
     /**
      * find devices by tenantId and type
@@ -36,7 +37,7 @@ public interface DeviceDao extends Dao<Device> {
      * @param type the type
      * @return the list of device objects
      */
-    List<Device> findDevicesByTenantIdAndType(UUID tenantId,String type);
+    List<Device> findDevicesByTenantIdAndType(UUID tenantId,String type, TextPageLink pageLink);
 
     /**
      * Find devices by tenantId and devices Ids.
@@ -54,7 +55,7 @@ public interface DeviceDao extends Dao<Device> {
      * @param customerId the customerId
      * @return the list of device objects
      */
-    List<Device> findDevicesByTenantIdAndCustomerId(UUID tenantId, UUID customerId);
+    List<Device> findDevicesByTenantIdAndCustomerId(UUID tenantId, UUID customerId, TextPageLink pageLink);
 
     /**
      * Find devices by tenantId, customerId and type
@@ -64,7 +65,7 @@ public interface DeviceDao extends Dao<Device> {
      * @param type the type
      * @return the list of device objects
      */
-    List<Device> findDevicesByTenantIdAndCustomerIdAndType(UUID tenantId, UUID customerId, String type);
+    List<Device> findDevicesByTenantIdAndCustomerIdAndType(UUID tenantId, UUID customerId, String type, TextPageLink pageLink);
 
 
     /**

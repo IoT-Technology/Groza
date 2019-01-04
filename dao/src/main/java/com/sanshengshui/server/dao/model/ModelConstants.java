@@ -46,6 +46,18 @@ public class ModelConstants {
     public static final String DOUBLE_VALUE_COLUMN = "dbl_v";
 
     /**
+     * Cassandra contact constants.
+     */
+    public static final String COUNTRY_PROPERTY = "country";
+    public static final String STATE_PROPERTY = "state";
+    public static final String CITY_PROPERTY = "city";
+    public static final String ADDRESS_PROPERTY = "address";
+    public static final String ADDRESS2_PROPERTY = "address2";
+    public static final String ZIP_PROPERTY = "zip";
+    public static final String PHONE_PROPERTY = "phone";
+    public static final String EMAIL_PROPERTY = "email";
+
+    /**
      * Cassandra device constants.
      */
     public static final String DEVICE_COLUMN_FAMILY_NAME = "device";
@@ -61,6 +73,16 @@ public class ModelConstants {
     public static final String DEVICE_BY_CUSTOMER_BY_TYPE_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "device_by_customer_by_type_and_search_text";
     public static final String DEVICE_BY_TENANT_AND_NAME_VIEW_NAME = "device_by_tenant_and_name";
     public static final String DEVICE_TYPES_BY_TENANT_VIEW_NAME = "device_types_by_tenant";
+
+    /**
+     * Cassandra tenant constants.
+     */
+    public static final String TENANT_COLUMN_FAMILY_NAME = "tenant";
+    public static final String TENANT_TITLE_PROPERTY = TITLE_PROPERTY;
+    public static final String TENANT_REGION_PROPERTY = "region";
+    public static final String TENANT_ADDITIONAL_INFO_PROPERTY = ADDITIONAL_INFO_PROPERTY;
+
+    public static final String TENANT_BY_REGION_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "tenant_by_region_and_search_text";
 
     /**
      * Cassandra device_credentials constants.

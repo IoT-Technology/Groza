@@ -1,6 +1,7 @@
 package com.sanshengshui.server.dao.customer;
 
 import com.sanshengshui.server.common.data.Customer;
+import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.dao.Dao;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface CustomerDao extends Dao<Customer> {
      * @param tenantId the tenant id
      * @return the list of customer objects
      */
-    List<Customer> findCustomersByTenantId(UUID tenantId);
+    List<Customer> findCustomersByTenantId(UUID tenantId, TextPageLink pageLink);
 
     /**
      * Find customers by tenantId and customer title.

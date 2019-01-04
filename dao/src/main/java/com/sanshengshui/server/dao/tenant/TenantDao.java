@@ -1,6 +1,7 @@
 package com.sanshengshui.server.dao.tenant;
 
 import com.sanshengshui.server.common.data.Tenant;
+import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.dao.Dao;
 
 import java.util.List;
@@ -23,5 +24,5 @@ public interface TenantDao extends Dao<Tenant> {
      * @param region
      * @return
      */
-    List<Tenant> findTenantsByRegion(String region);
+    List<Tenant> findTenantsByRegion(String region, TextPageLink pageLink);
 }
