@@ -38,6 +38,18 @@ public class ModelConstants {
     public static final String LAST_UPDATE_TS_COLUMN = "last_update_ts";
 
     /**
+     * Cassandra customer constants.
+     */
+    public static final String CUSTOMER_COLUMN_FAMILY_NAME = "customer";
+    public static final String CUSTOMER_TENANT_ID_PROPERTY = TENANT_ID_PROPERTY;
+    public static final String CUSTOMER_TITLE_PROPERTY = TITLE_PROPERTY;
+    public static final String CUSTOMER_ADDITIONAL_INFO_PROPERTY = ADDITIONAL_INFO_PROPERTY;
+
+    public static final String CUSTOMER_BY_TENANT_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "customer_by_tenant_and_search_text";
+    public static final String CUSTOMER_BY_TENANT_AND_TITLE_VIEW_NAME = "customer_by_tenant_and_title";
+
+
+    /**
      * Main names of cassandra key-value columns storage.
      */
     public static final String BOOLEAN_VALUE_COLUMN = "bool_v";
