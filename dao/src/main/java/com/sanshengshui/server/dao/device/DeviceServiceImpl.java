@@ -17,7 +17,6 @@ import com.sanshengshui.server.dao.tenant.TenantDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -49,8 +48,6 @@ public class DeviceServiceImpl implements DeviceService{
     @Autowired
     private CustomerDao customerDao;
 
-    @Autowired
-    private CacheManager cacheManager;
 
     @Override
     public Device findDeviceById(DeviceId deviceId) {
