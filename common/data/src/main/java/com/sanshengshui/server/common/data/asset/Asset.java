@@ -7,12 +7,16 @@ import com.sanshengshui.server.common.data.SearchTextBasedWithAdditionalInfo;
 import com.sanshengshui.server.common.data.id.AssetId;
 import com.sanshengshui.server.common.data.id.CustomerId;
 import com.sanshengshui.server.common.data.id.TenantId;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author james mu
  * @date 19-1-3 下午4:59
  */
+@EqualsAndHashCode(callSuper = true)
 public class Asset extends SearchTextBasedWithAdditionalInfo<AssetId> implements HasName, HasTenantId, HasCustomerId {
+
+    private static final long serialVersionUID = 2807343040519543363L;
 
     private TenantId tenantId;
     private CustomerId customerId;
