@@ -98,6 +98,24 @@ public class ModelConstants {
 
 
     /**
+     * Cassandra asset constants.
+     */
+    public static final String ASSET_COLUMN_FAMILY_NAME = "asset";
+    public static final String ASSET_TENANT_ID_PROPERTY = TENANT_ID_PROPERTY;
+    public static final String ASSET_CUSTOMER_ID_PROPERTY = CUSTOMER_ID_PROPERTY;
+    public static final String ASSET_NAME_PROPERTY = "name";
+    public static final String ASSET_TYPE_PROPERTY = "type";
+    public static final String ASSET_ADDITIONAL_INFO_PROPERTY = ADDITIONAL_INFO_PROPERTY;
+
+    public static final String ASSET_BY_TENANT_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "asset_by_tenant_and_search_text";
+    public static final String ASSET_BY_TENANT_BY_TYPE_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "asset_by_tenant_by_type_and_search_text";
+    public static final String ASSET_BY_CUSTOMER_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "asset_by_customer_and_search_text";
+    public static final String ASSET_BY_CUSTOMER_BY_TYPE_AND_SEARCH_TEXT_COLUMN_FAMILY_NAME = "asset_by_customer_by_type_and_search_text";
+    public static final String ASSET_BY_TENANT_AND_NAME_VIEW_NAME = "asset_by_tenant_and_name";
+    public static final String ASSET_TYPES_BY_TENANT_VIEW_NAME = "asset_types_by_tenant";
+
+
+    /**
      * Cassandra event constants.
      */
     public static final String EVENT_COLUMN_FAMILY_NAME = "event";
