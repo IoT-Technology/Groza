@@ -124,11 +124,11 @@ public class JsonCoapAdaptor implements CoapTransportAdaptor{
     }
 
     private Response convertNotificationResponse(CoapSessionCtx ctx, AttributesUpdateNotification msg) {
-        return getObserveNotification(ctx, );
+        return getObserveNotification(ctx,JsonConverter.toJson(msg.getData(), false));
     }
 
     private Response convertToDeviceRpcRequest(CoapSessionCtx ctx, ToDeviceRpcRequestMsg msg) {
-        return getObserveNotification(ctx, );
+        return getObserveNotification(ctx, JsonConverter.toJson(msg, true));
     }
 
     private Response getObserveNotification(CoapSessionCtx ctx, JsonObject json) {

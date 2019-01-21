@@ -160,6 +160,40 @@ public class JsonConverter {
         return error;
     }
 
+    public static JsonObject toJson(ToDeviceRpcRequestMsg msg, boolean includeRequestId) {
+        JsonObject result = new JsonObject();
+        if (includeRequestId) {
+            result.addProperty("id", msg.getRequestId());
+        }
+        result.addProperty("method", msg.getMethod());
+        result.add("params", new JsonParser().parse(msg.getParams()));
+        return result;
+    }
+
+    public static JsonObject toJson(AttributesKVMsg payload, boolean asMap) {
+        JsonObject result = new JsonObject();
+        if (asMap) {
+            if (!payload.getClientAttributes().isEmpty()) {
+                JsonObject attrObject = new JsonObject();
+                payload.getClientAttributes().forEach(addToObject(attrObject));
+                result.add("client", attrObject);
+            }
+            if (!payload.getSharedAttributes().isEmpty()) {
+                JsonObject attrObject = new JsonObject();
+                payload.getSharedAttributes().forEach(addToObject(attrObject));
+                result.add("shared", attrObject);
+            }
+        } else {
+            payload.getClientAttributes().forEach(addToObject(result));
+            payload.getSharedAttributes().forEach(addToObject(result));
+        }
+        if (!payload.getDeletedAttributes().isEmpty()) {
+            JsonArray attrObject = new JsonArray();
+            payload.getDeletedAttributes().forEach(addToObject(attrObject));
+            result.add("deleted", attrObject);
+        }
+        return result;
+    }
 
 
     public static JsonElement toJson(ToServerRpcResponseMsg msg) {
