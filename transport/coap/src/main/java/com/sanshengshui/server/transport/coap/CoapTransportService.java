@@ -1,5 +1,8 @@
 package com.sanshengshui.server.transport.coap;
 
+import com.sanshengshui.server.common.transport.SessionMsgProcessor;
+import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.transport.coap.adaptors.CoapTransportAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
@@ -25,6 +28,13 @@ public class CoapTransportService {
 
     private CoapServer server;
 
+    @Autowired(required = false)
+    private ApplicationContext appContext;
+    @Autowired(required = false)
+    private SessionMsgProcessor processor;
+
+    @Autowired(required = false)
+    private DeviceAuthService authService;
 
     @Value("${coap.bind_address}")
     private String host;
@@ -35,11 +45,13 @@ public class CoapTransportService {
     @Value("${coap.timeout}")
     private Long timeout;
 
+    private CoapTransportAdaptor adaptor;
 
     @PostConstruct
     public void init() throws UnknownHostException {
         log.info("Starting CoAP transport...");
         log.info("Lookup CoAP transport adaptor {}", adaptorName);
+        this.adaptor = (CoapTransportAdaptor) appContext.getBean(adaptorName);
         log.info("Starting CoAP transport server");
         this.server = new CoapServer();
         createResources();
@@ -52,7 +64,7 @@ public class CoapTransportService {
 
     private void createResources() {
         CoapResource api = new CoapResource(API);
-        api.add(new CoapTransportResource(V1,timeout));
+        api.add(new CoapTransportResource(processor,authService,adaptor,V1,timeout));
         server.add(api);
     }
 

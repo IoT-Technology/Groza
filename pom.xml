@@ -75,6 +75,21 @@
     <dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>com.sanshengshui.transport</groupId>
+            <artifactId>http</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sanshengshui.transport</groupId>
+            <artifactId>mqtt</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sanshengshui.transport</groupId>
+            <artifactId>coap</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>com.sanshengshui.common</groupId>
             <artifactId>message</artifactId>
             <version>${project.version}</version>

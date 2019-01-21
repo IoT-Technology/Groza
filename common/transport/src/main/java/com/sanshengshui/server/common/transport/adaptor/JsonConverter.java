@@ -3,10 +3,12 @@ package com.sanshengshui.server.common.transport.adaptor;
 import com.google.gson.*;
 import com.sanshengshui.server.common.data.kv.*;
 import com.sanshengshui.server.common.msg.core.*;
+import com.sanshengshui.server.common.msg.kv.AttributesKVMsg;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +47,36 @@ public class JsonConverter {
             throw new JsonSyntaxException(CAN_T_PARSE_VALUE + jsonObject);
         }
         return request;
+    }
+
+
+    private static Consumer<AttributeKey> addToObject(JsonArray result) {
+        return key -> {
+            result.add(key.getAttributeKey());
+        };
+    }
+
+    private static Consumer<AttributeKvEntry> addToObject(JsonObject result) {
+        return de -> {
+            JsonPrimitive value;
+            switch (de.getDataType()) {
+                case BOOLEAN:
+                    value = new JsonPrimitive(de.getBooleanValue().get());
+                    break;
+                case DOUBLE:
+                    value = new JsonPrimitive(de.getDoubleValue().get());
+                    break;
+                case LONG:
+                    value = new JsonPrimitive(de.getLongValue().get());
+                    break;
+                case STRING:
+                    value = new JsonPrimitive(de.getStrValue().get());
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported data type: " + de.getDataType());
+            }
+            result.add(de.getKey(), value);
+        };
     }
 
     public static AttributesUpdateRequest convertToAttributes(JsonElement element, int requestId) {
@@ -114,6 +146,24 @@ public class JsonConverter {
         for (KvEntry entry : parseValues(jo)) {
             request.add(systemTs, entry);
         }
+    }
+
+    public static ToServerRpcRequestMsg convertToServerRpcRequest(JsonElement json, int requestId) throws JsonSyntaxException {
+        JsonObject object = json.getAsJsonObject();
+        return new ToServerRpcRequestMsg(requestId, object.get("method").getAsString(), GSON.toJson(object.get("params")));
+    }
+
+
+    public static JsonElement toErrorJson(String errorMsg) {
+        JsonObject error = new JsonObject();
+        error.addProperty("error", errorMsg);
+        return error;
+    }
+
+
+
+    public static JsonElement toJson(ToServerRpcResponseMsg msg) {
+        return new JsonParser().parse(msg.getData());
     }
 
 }

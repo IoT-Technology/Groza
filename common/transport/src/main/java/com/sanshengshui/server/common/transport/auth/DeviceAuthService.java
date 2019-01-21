@@ -2,6 +2,7 @@ package com.sanshengshui.server.common.transport.auth;
 
 import com.sanshengshui.server.common.data.Device;
 import com.sanshengshui.server.common.data.id.DeviceId;
+import com.sanshengshui.server.common.data.security.DeviceCredentialsFilter;
 
 import java.util.Optional;
 
@@ -11,7 +12,7 @@ import java.util.Optional;
  */
 public interface DeviceAuthService {
 
-    DeviceAuthResult process();
+    DeviceAuthResult process(DeviceCredentialsFilter credentials);
 
     Optional<Device> findDeviceById(DeviceId deviceId);
 }
