@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/dreamans/syncd/master/resource/logo.png" alt="Groza">
+    <img src="doc/groza.png" alt="Groza">
 </p>
 <h3 align="center">Groza - 开源物联网平台</h3>
 <p align="center">
