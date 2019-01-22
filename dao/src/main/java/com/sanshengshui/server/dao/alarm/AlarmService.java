@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.sanshengshui.server.common.data.alarm.*;
 import com.sanshengshui.server.common.data.id.EntityId;
 import com.sanshengshui.server.common.data.id.TenantId;
+import com.sanshengshui.server.common.data.page.TimePageData;
 
 /**
  * @author james mu
@@ -22,6 +23,7 @@ public interface AlarmService {
 
     ListenableFuture<AlarmInfo> findAlarmInfoByIdAsync(AlarmId alarmId);
 
+    ListenableFuture<TimePageData<AlarmInfo>> findAlarms(AlarmQuery query);
 
     AlarmSeverity findHighestAlarmSeverity(EntityId entityId, AlarmSearchStatus alarmSearchStatus,
                                            AlarmStatus alarmStatus);

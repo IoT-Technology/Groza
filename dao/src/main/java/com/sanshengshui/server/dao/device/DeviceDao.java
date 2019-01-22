@@ -37,7 +37,7 @@ public interface DeviceDao extends Dao<Device> {
      * @param type the type
      * @return the list of device objects
      */
-    List<Device> findDevicesByTenantIdAndType(UUID tenantId,String type, TextPageLink pageLink);
+    List<Device> findDevicesByTenantIdAndType(UUID tenantId, String type, TextPageLink pageLink);
 
     /**
      * Find devices by tenantId and devices Ids.

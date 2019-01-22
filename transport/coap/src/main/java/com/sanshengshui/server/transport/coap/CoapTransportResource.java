@@ -1,10 +1,7 @@
 package com.sanshengshui.server.transport.coap;
 
 import com.sanshengshui.server.common.data.id.SessionId;
-import com.sanshengshui.server.common.msg.session.AdaptorToSessionActorMsg;
-import com.sanshengshui.server.common.msg.session.FeatureType;
-import com.sanshengshui.server.common.msg.session.SessionMsgType;
-import com.sanshengshui.server.common.msg.session.SessionType;
+import com.sanshengshui.server.common.msg.session.*;
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.adaptor.AdaptorException;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
@@ -18,6 +15,7 @@ import org.eclipse.californium.core.network.Exchange;
 import org.eclipse.californium.core.server.resources.CoapExchange;
 import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +23,14 @@ import java.util.Optional;
 public class CoapTransportResource extends CoapResource {
 
     // coap://localhost:port/api/v1/DEVICE_TOKEN/[attributes|telemetry|rpc[/requestId]]
+    private static final int ACCESS_TOKEN_POSITION = 3;
     private static final int FEATURE_TYPE_POSITION = 4;
     private static final int REQUEST_ID_POSITION = 5;
+
 
     private final CoapTransportAdaptor adaptor;
     private final SessionMsgProcessor processor;
     private final DeviceAuthService authService;
-
     private final long timeout;
 
     public CoapTransportResource(SessionMsgProcessor processor, DeviceAuthService authService, CoapTransportAdaptor adaptor, String name,
@@ -41,6 +40,7 @@ public class CoapTransportResource extends CoapResource {
         this.authService = authService;
         this.adaptor = adaptor;
         this.timeout = timeout;
+        this.setObservable(false);
     }
 
     @Override
@@ -124,6 +124,7 @@ public class CoapTransportResource extends CoapResource {
                     throw new IllegalArgumentException("Unsupported msg type: " + type);
             }
             log.trace("Processing msg: {}", msg);
+            processor.process(new BasicTransportToDeviceSessionActorMsg(ctx.getDevice(), msg));
         } catch (AdaptorException e) {
             log.debug("Failed to decode payload {}", e);
             exchange.respond(CoAP.ResponseCode.BAD_REQUEST, e.getMessage());
@@ -158,4 +159,6 @@ public class CoapTransportResource extends CoapResource {
         }
         return Optional.empty();
     }
+
+
 }

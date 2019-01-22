@@ -30,6 +30,7 @@ public class CoapTransportService {
 
     @Autowired(required = false)
     private ApplicationContext appContext;
+
     @Autowired(required = false)
     private SessionMsgProcessor processor;
 

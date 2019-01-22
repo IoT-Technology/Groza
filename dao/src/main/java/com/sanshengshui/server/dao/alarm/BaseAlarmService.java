@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.sanshengshui.server.common.data.alarm.*;
 import com.sanshengshui.server.common.data.id.EntityId;
 import com.sanshengshui.server.common.data.id.TenantId;
+import com.sanshengshui.server.common.data.page.TimePageData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,11 @@ public class BaseAlarmService implements AlarmService{
 
     @Override
     public ListenableFuture<AlarmInfo> findAlarmInfoByIdAsync(AlarmId alarmId) {
+        return null;
+    }
+
+    @Override
+    public ListenableFuture<TimePageData<AlarmInfo>> findAlarms(AlarmQuery query) {
         return null;
     }
 
