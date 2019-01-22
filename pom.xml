@@ -55,6 +55,7 @@
         <gson.version>2.6.2</gson.version>
         <protobuf.version>3.0.2</protobuf.version>
         <mysql.version>8.0.12</mysql.version>
+        <postgresql.driver.version>9.4.1211</postgresql.driver.version>
         <cassandra.version>3.5.0</cassandra.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
         <bouncycastle.version>1.60</bouncycastle.version>
@@ -118,6 +119,11 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.driver.version}</version>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
