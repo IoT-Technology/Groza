@@ -3,10 +3,9 @@
 </p>
 <h3 align="center">Groza - 开源物联网平台</h3>
 <p align="center">
-    <a href="https://travis-ci.org/dreamans/syncd"><img src="https://travis-ci.org/dreamans/syncd.svg?branch=master" /></a>
-    <a href="https://godoc.org/github.com/dreamans/syncd"><img src="https://godoc.org/github.com/dreamans/syncd?status.svg" /></a>
-    <a href="https://github.com/dreamans/syncd/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000.svg" /></a>
-    <a href="https://github.com/dreamans/syncd/issues"><img src="http://isitmaintained.com/badge/open/dreamans/syncd.svg" /></a>
+    <a href="https://travis-ci.org/sanshengshui/Groza"><img src="https://travis-ci.com/sanshengshui/Groza.svg?branch=master" /></a>
+    <a href="https://github.com/sanshengshui/Groza/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-000000.svg" /></a>
+    <a href="https://github.com/sanshengshui/Groza/issues"><img src="http://isitmaintained.com/badge/open/dreamans/syncd.svg" /></a>
 
 ## 目录
 
