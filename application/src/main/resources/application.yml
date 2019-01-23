@@ -37,12 +37,58 @@ coap:
   adaptor: JsonCoapAdaptor
   timeout: 10000
 
+
 database:
   type: sql # sql OR mongodb
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/groza?useUnicode=true&characterEncoding=utf8&useSSL=false
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: james
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: jamesmsw
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+
+
+quota:
+  host:
+    # Max allowed number of API requests in interval for single host
+    limit: "${QUOTA_HOST_LIMIT:10000}"
+    # Interval duration
+    intervalMs: "${QUOTA_HOST_INTERVAL_MS:60000}"
+    # Maximum silence duration for host after which Host removed from QuotaService. Must be bigger than intervalMs
+    ttlMs: "${QUOTA_HOST_TTL_MS:60000}"
+    # Interval for scheduled task that cleans expired records. TTL is used for expiring
+    cleanPeriodMs: "${QUOTA_HOST_CLEAN_PERIOD_MS:300000}"
+    # Enable Host API Limits
+    enabled: "${QUOTA_HOST_ENABLED:false}"
+    # Array of whitelist hosts
+    whitelist: "${QUOTA_HOST_WHITELIST:localhost,127.0.0.1}"
+    # Array of blacklist hosts
+    blacklist: "${QUOTA_HOST_BLACKLIST:}"
+    log:
+      topSize: 10
+      intervalMin: 2
+  rule:
+    tenant:
+      # Max allowed number of API requests in interval for single tenant
+      limit: "${QUOTA_TENANT_LIMIT:100000}"
+      # Interval duration
+      intervalMs: "${QUOTA_TENANT_INTERVAL_MS:60000}"
+      # Maximum silence duration for tenant after which Tenant removed from QuotaService. Must be bigger than intervalMs
+      ttlMs: "${QUOTA_TENANT_TTL_MS:60000}"
+      # Interval for scheduled task that cleans expired records. TTL is used for expiring
+      cleanPeriodMs: "${QUOTA_TENANT_CLEAN_PERIOD_MS:300000}"
+      # Enable Host API Limits
+      enabled: "${QUOTA_TENANT_ENABLED:false}"
+      # Array of whitelist tenants
+      whitelist: "${QUOTA_TENANT_WHITELIST:}"
+      # Array of blacklist tenants
+      blacklist: "${QUOTA_HOST_BLACKLIST:}"
+      log:
+        topSize: 10
+        intervalMin: 268
