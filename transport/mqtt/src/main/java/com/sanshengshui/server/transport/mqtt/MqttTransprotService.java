@@ -3,6 +3,7 @@ package com.sanshengshui.server.transport.mqtt;
 
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.common.transport.quota.host.HostRequestsQuotaService;
 import com.sanshengshui.server.dao.device.DeviceService;
 import com.sanshengshui.server.dao.relation.RelationService;
 import com.sanshengshui.server.transport.mqtt.adaptors.MqttTransportAdaptor;
@@ -53,6 +54,7 @@ public class MqttTransprotService {
     private MqttSslHandlerProvider sslHandlerProvider;
 
     @Autowired(required = false)
+    private HostRequestsQuotaService quotaService;
 
     @Value("${mqtt.bind_address}")
     private String host;
@@ -97,7 +99,7 @@ public class MqttTransprotService {
         b.group(bossGroup, workerGroup)//设置使用的EventLoopGroup
                 .channel(NioServerSocketChannel.class)//设置要被实例化的为NioServerSocketChannel类
                 .childHandler(new MqttTransportServerInitializer(processor, deviceService, authService, relationService,
-                        adaptor, sslHandlerProvider, maxPayloadSize));//设置连入服务端的Client的SocketChannel的处理器
+                        adaptor, sslHandlerProvider, quotaService, maxPayloadSize));//设置连入服务端的Client的SocketChannel的处理器
         /**
          * 绑定端口，并同步等待成功，即启动服务器
          */

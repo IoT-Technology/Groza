@@ -12,6 +12,7 @@ import com.sanshengshui.server.common.msg.session.ctrl.SessionCloseMsg;
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.adaptor.AdaptorException;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.common.transport.quota.QuotaService;
 import com.sanshengshui.server.dao.EncryptionUtil;
 import com.sanshengshui.server.dao.device.DeviceService;
 import com.sanshengshui.server.dao.relation.RelationService;
@@ -58,13 +59,14 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
     private final DeviceService deviceService;
     private final DeviceAuthService authService;
     private final RelationService relationService;
+    private final QuotaService quotaService;
     private final SslHandler sslHandler;
     private volatile boolean connected;
     private volatile InetSocketAddress address;
     private volatile GatewaySessionCtx gatewaySessionCtx;
 
     public MqttTransportHandler(SessionMsgProcessor processor, DeviceService deviceService, DeviceAuthService authService, RelationService relationService,
-                                MqttTransportAdaptor adaptor, SslHandler sslHandler) {
+                                MqttTransportAdaptor adaptor, SslHandler sslHandler, QuotaService quotaService) {
         this.processor = processor;
         this.deviceService = deviceService;
         this.relationService = relationService;
@@ -73,6 +75,7 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
         this.deviceSessionCtx = new DeviceSessionCtx(processor, authService, adaptor);
         this.sessionId = deviceSessionCtx.getSessionId().toUidStr();
         this.sslHandler = sslHandler;
+        this.quotaService = quotaService;
     }
 
     @Override
