@@ -27,6 +27,7 @@
         <module>application</module>
         <module>common</module>
         <module>dao</module>
+        <module>tools</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -62,6 +63,7 @@
         <commons-validator.version>1.5.0</commons-validator.version>
         <scala.version>2.11</scala.version>
         <akka.version>2.4.2</akka.version>
+        <paho.client.version>1.1.0</paho.client.version>
     </properties>
 
 
@@ -294,6 +296,11 @@
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-slf4j_${scala.version}</artifactId>
             <version>${akka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+            <version>${paho.client.version}</version>
         </dependency>
     </dependencies>
     </dependencyManagement>
