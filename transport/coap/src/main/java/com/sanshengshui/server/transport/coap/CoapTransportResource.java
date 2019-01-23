@@ -5,6 +5,7 @@ import com.sanshengshui.server.common.msg.session.*;
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.adaptor.AdaptorException;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.common.transport.quota.QuotaService;
 import com.sanshengshui.server.transport.coap.adaptors.CoapTransportAdaptor;
 import com.sanshengshui.server.transport.coap.session.CoapSessionCtx;
 import lombok.extern.slf4j.Slf4j;
@@ -31,13 +32,15 @@ public class CoapTransportResource extends CoapResource {
     private final CoapTransportAdaptor adaptor;
     private final SessionMsgProcessor processor;
     private final DeviceAuthService authService;
+    private final QuotaService quotaService;
     private final long timeout;
 
     public CoapTransportResource(SessionMsgProcessor processor, DeviceAuthService authService, CoapTransportAdaptor adaptor, String name,
-                                 long timeout) {
+                                 long timeout, QuotaService quotaService) {
         super(name);
         this.processor = processor;
         this.authService = authService;
+        this.quotaService = quotaService;
         this.adaptor = adaptor;
         this.timeout = timeout;
         this.setObservable(false);

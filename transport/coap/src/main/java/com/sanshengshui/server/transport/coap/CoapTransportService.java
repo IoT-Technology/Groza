@@ -2,6 +2,7 @@ package com.sanshengshui.server.transport.coap;
 
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.common.transport.quota.host.HostRequestsQuotaService;
 import com.sanshengshui.server.transport.coap.adaptors.CoapTransportAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.californium.core.CoapResource;
@@ -37,6 +38,9 @@ public class CoapTransportService {
     @Autowired(required = false)
     private DeviceAuthService authService;
 
+    @Autowired(required = false)
+    private HostRequestsQuotaService quotaService;
+
     @Value("${coap.bind_address}")
     private String host;
     @Value("${coap.bind_port}")
@@ -65,7 +69,7 @@ public class CoapTransportService {
 
     private void createResources() {
         CoapResource api = new CoapResource(API);
-        api.add(new CoapTransportResource(processor,authService,adaptor,V1,timeout));
+        api.add(new CoapTransportResource(processor,authService,adaptor,V1,timeout, quotaService));
         server.add(api);
     }
 
