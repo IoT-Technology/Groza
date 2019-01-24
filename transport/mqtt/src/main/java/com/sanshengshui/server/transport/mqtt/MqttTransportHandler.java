@@ -34,6 +34,8 @@ import javax.security.cert.X509Certificate;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static com.sanshengshui.server.common.msg.session.SessionMsgType.*;
 import static com.sanshengshui.server.transport.mqtt.MqttTopics.*;
@@ -61,6 +63,8 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
     private final RelationService relationService;
     private final QuotaService quotaService;
     private final SslHandler sslHandler;
+    private final ConcurrentMap<MqttTopicMatcher, Integer> mqttQoSMap;
+
     private volatile boolean connected;
     private volatile InetSocketAddress address;
     private volatile GatewaySessionCtx gatewaySessionCtx;
@@ -72,7 +76,8 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
         this.relationService = relationService;
         this.authService = authService;
         this.adaptor = adaptor;
-        this.deviceSessionCtx = new DeviceSessionCtx(processor, authService, adaptor);
+        this.mqttQoSMap = new ConcurrentHashMap<>();
+        this.deviceSessionCtx = new DeviceSessionCtx(processor, authService, adaptor, mqttQoSMap);
         this.sessionId = deviceSessionCtx.getSessionId().toUidStr();
         this.sslHandler = sslHandler;
         this.quotaService = quotaService;
@@ -96,11 +101,11 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
             return;
         }
 
-//        if (quotaService.isQuotaExceeded(address.getHostName())) {
-//            log.warn("MQTT Quota exceeded for [{}:{}] . Disconnect", address.getHostName(), address.getPort());
-//            processDisconnect(ctx);
-//            return;
-//        }
+        if (quotaService.isQuotaExceeded(address.getHostName())) {
+            log.warn("MQTT Quota exceeded for [{}:{}] . Disconnect", address.getHostName(), address.getPort());
+            processDisconnect(ctx);
+            return;
+        }
 
         deviceSessionCtx.setChannel(ctx);
         /**

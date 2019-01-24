@@ -5,7 +5,10 @@ import com.sanshengshui.server.common.data.id.DeviceId;
 import com.sanshengshui.server.common.data.security.DeviceCredentialsFilter;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthResult;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
+import com.sanshengshui.server.dao.device.DeviceCredentialsService;
+import com.sanshengshui.server.dao.device.DeviceService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +20,12 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class DefaultDeviceAuthService implements DeviceAuthService {
+
+    @Autowired
+    DeviceService deviceService;
+
+    @Autowired
+    DeviceCredentialsService deviceCredentialsService;
 
     @Override
     public DeviceAuthResult process(DeviceCredentialsFilter credentials) {

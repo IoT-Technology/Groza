@@ -26,7 +26,6 @@ public class MqttTransportServerInitializer extends ChannelInitializer<SocketCha
     private final MqttTransportAdaptor adaptor;
     private final MqttSslHandlerProvider sslHandlerProvider;
     private final QuotaService quotaService;
-
     private final int maxPayloadSize;
 
     public MqttTransportServerInitializer(SessionMsgProcessor processor, DeviceService deviceService, DeviceAuthService authService, RelationService relationService,

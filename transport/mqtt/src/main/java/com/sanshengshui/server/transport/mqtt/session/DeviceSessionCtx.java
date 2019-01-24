@@ -10,6 +10,7 @@ import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.adaptor.AdaptorException;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
 import com.sanshengshui.server.common.transport.session.DeviceAwareSessionContext;
+import com.sanshengshui.server.transport.mqtt.MqttTopicMatcher;
 import com.sanshengshui.server.transport.mqtt.adaptors.MqttTransportAdaptor;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.mqtt.MqttFixedHeader;
@@ -18,6 +19,7 @@ import io.netty.handler.codec.mqtt.MqttMessageType;
 import io.netty.handler.codec.mqtt.MqttQoS;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -25,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date 19-1-23 上午9:34
  */
 @Slf4j
-public class DeviceSessionCtx extends DeviceAwareSessionContext {
+public class DeviceSessionCtx extends MqttDeviceAwareSessionContext {
 
     private final MqttTransportAdaptor adaptor;
     private final MqttSessionId sessionId;
@@ -33,8 +35,8 @@ public class DeviceSessionCtx extends DeviceAwareSessionContext {
     private volatile boolean allowAttributeResponses;
     private AtomicInteger msgIdSeq = new AtomicInteger(0);
 
-    public DeviceSessionCtx(SessionMsgProcessor processor, DeviceAuthService authService, MqttTransportAdaptor adaptor){
-        super(processor, authService);
+    public DeviceSessionCtx(SessionMsgProcessor processor, DeviceAuthService authService, MqttTransportAdaptor adaptor, ConcurrentMap<MqttTopicMatcher, Integer> mqttQoSMap){
+        super(processor, authService, mqttQoSMap);
         this.adaptor = adaptor;
         this.sessionId = new MqttSessionId();
     }

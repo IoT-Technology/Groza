@@ -3,7 +3,10 @@ package com.sanshengshui.server.dao.device;
 import com.sanshengshui.server.common.data.id.DeviceId;
 import com.sanshengshui.server.common.data.security.DeviceCredentials;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.sanshengshui.server.dao.service.Validator.validateId;
 
 /**
  * @author james mu
@@ -13,12 +16,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeviceCredentialsServiceImpl implements DeviceCredentialsService{
 
+    @Autowired
     private DeviceCredentialsDao deviceCredentialsDao;
 
+    @Autowired
+    private DeviceService deviceService;
 
     @Override
     public DeviceCredentials findDeviceCredentialsByDeviceId(DeviceId deviceId) {
-        return null;
+        log.trace("Executing findDeviceCredentialsByDeviceID [{}]", deviceId);
+        validateId(deviceId, "Incorrect deviceId " + deviceId);
+        return deviceCredentialsDao.findByDeviceId(deviceId.getId());
     }
 
     @Override

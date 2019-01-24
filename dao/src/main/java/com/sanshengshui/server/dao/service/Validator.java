@@ -2,6 +2,7 @@ package com.sanshengshui.server.dao.service;
 
 import com.sanshengshui.server.common.data.id.EntityId;
 import com.sanshengshui.server.common.data.id.UUIDBased;
+import com.sanshengshui.server.common.data.page.BasePageLink;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 
 import java.util.List;
@@ -94,6 +95,19 @@ public class Validator {
             for (UUIDBased id : ids) {
                 validateId(id, errorMessage);
             }
+        }
+    }
+
+    /**
+     * This method validate <code>PageLink</code> page link. If pageLink is invalid than throw
+     * <code>IncorrectParameterException</code> exception
+     *
+     * @param pageLink     the page link
+     * @param errorMessage the error message for exception
+     */
+    public static void validatePageLink(BasePageLink pageLink, String errorMessage) {
+        if (pageLink == null || pageLink.getLimit() < 1 || (pageLink.getIdOffset() != null && pageLink.getIdOffset().version() != 1)) {
+            throw new IncorrectParameterException(errorMessage);
         }
     }
 
