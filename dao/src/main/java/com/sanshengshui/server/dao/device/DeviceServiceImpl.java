@@ -37,38 +37,82 @@ import static com.sanshengshui.server.dao.service.Validator.validateId;
 @Slf4j
 public class DeviceServiceImpl implements DeviceService{
 
+    public static final String INCORRECT_TENANT_ID = "Incorrect tenantId ";
+    public static final String INCORRECT_PAGE_LINK = "Incorrect page link ";
+    public static final String INCORRECT_CUSTOMER_ID = "Incorrect customerId ";
+    public static final String INCORRECT_DEVICE_ID = "Incorrect deviceId ";
+
+    @Autowired
+    private DeviceDao deviceDao;
+
+    @Autowired
+    private TenantDao tenantDao;
+
+    @Autowired
+    private CustomerDao customerDao;
+
+    @Autowired
+    private DeviceCredentialsService deviceCredentialsService;
+
+
+
     @Override
     public Device findDeviceById(DeviceId deviceId) {
-        return null;
+        log.trace("Executing findDeviceById [{}]", deviceId);
+        validateId(deviceId , INCORRECT_DEVICE_ID + deviceId);
+        return deviceDao.findById(deviceId.getId());
     }
 
     @Override
     public ListenableFuture<Device> findDeviceByIdAsync(DeviceId deviceId) {
-        return null;
+        log.trace("Executing findDeviceById", deviceId);
+        validateId(deviceId, INCORRECT_DEVICE_ID + deviceId);
+        return deviceDao.findByIdAsync(deviceId.getId());
     }
 
     @Override
     public Device findDeviceByTenantIdAndName(TenantId tenantId, String name) {
-        return null;
+        log.trace("Executing findDeviceByTenantIdAndName [{}][{}]", tenantId, name);
+        validateId(tenantId, INCORRECT_TENANT_ID + tenantId);
+        Optional<Device> deviceOpt = deviceDao.findDeviceByTenantIdAndName(tenantId.getId(), name);
+        return deviceOpt.orElse(null);
     }
 
     @Override
     public Device saveDevice(Device device) {
-        return null;
+        log.trace("Executing saveDevice [{}]", device);
+        deviceValidator.validate(device);
+        Device savedDevice = deviceDao.save(device);
+        if (device.getId() == null){
+            DeviceCredentials deviceCredentials = new DeviceCredentials();
+            deviceCredentials.setDeviceId(new DeviceId(savedDevice.getUuidId()));
+            deviceCredentials.setCredentialsType(DeviceCredentialsType.ACCESS_TOKEN);
+            deviceCredentials.setCredentialsId(RandomStringUtils.randomAlphanumeric(20));
+            deviceCredentialsService.createDeviceCredentials(deviceCredentials);
+        }
+        return savedDevice;
     }
 
     @Override
     public Device assignDeviceToCustomer(DeviceId deviceId, CustomerId customerId) {
-        return null;
+        Device device = findDeviceById(deviceId);
+        device.setCustomerId(null);
+        return saveDevice(device);
     }
 
     @Override
     public Device unassignDeviceFromCustomer(DeviceId deviceId) {
-        return null;
+        Device device = findDeviceById(deviceId);
+        device.setCustomerId(null);
+        return saveDevice(device);
     }
 
     @Override
     public void deleteDevice(DeviceId deviceId) {
+        log.trace("Executing deleteDevice [{}]", deviceId);
+        validateId(deviceId, INCORRECT_DEVICE_ID + deviceId);
+
+        Device device = deviceDao.findById(deviceId.getId());
 
     }
 
@@ -121,4 +165,59 @@ public class DeviceServiceImpl implements DeviceService{
     public ListenableFuture<List<EntitySubtype>> findDeviceTypesByTenantId(TenantId tenantId) {
         return null;
     }
+
+    private DataValidator<Device> deviceValidator =
+
+            new DataValidator<Device>() {
+
+                @Override
+                protected void validateDataImpl(Device device) {
+                    if (StringUtils.isEmpty(device.getType())) {
+                        throw new DataValidationException("Device type should be specified!");
+                    }
+                    if (StringUtils.isEmpty(device.getName())) {
+                        throw new DataValidationException("Device name should be specified!");
+                    }
+                    if (device.getTenantId() == null) {
+                        throw new DataValidationException("Device should be assigned to tenant!");
+                    } else {
+                        Tenant tenant = tenantDao.findById(device.getTenantId().getId());
+                        if (tenant == null) {
+                            throw new DataValidationException("Device is referencing to non-existent tenant!");
+                        }
+                    }
+                    if (device.getCustomerId() == null) {
+                        device.setCustomerId(new CustomerId(NULL_UUID));
+                    } else if (!device.getCustomerId().getId().equals(NULL_UUID)) {
+                        Customer customer = customerDao.findById(device.getCustomerId().getId());
+                        if (customer == null) {
+                            throw new DataValidationException("Can't assign device to non-existent customer!");
+                        }
+                        if (!customer.getTenantId().getId().equals(device.getTenantId().getId())) {
+                            throw new DataValidationException("Can't assign device to customer from different tenant!");
+                        }
+                    }
+                }
+
+                @Override
+                protected void validateCreate(Device device) {
+                    deviceDao.findDeviceByTenantIdAndName(device.getTenantId().getId(), device.getName()).ifPresent(
+                            d -> {
+                                throw new DataValidationException("Device with such name already exists!");
+                            }
+                    );
+                }
+
+                @Override
+                protected void validateUpdate(Device device) {
+                    deviceDao.findDeviceByTenantIdAndName(device.getTenantId().getId(), device.getName()).ifPresent(
+                            d -> {
+                                if (!d.getUuidId().equals(device.getUuidId())) {
+                                    throw new DataValidationException("Device with such name already exists!");
+                                }
+                            }
+                    );
+                }
+
+            };
 }
