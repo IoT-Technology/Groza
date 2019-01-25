@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.sanshengshui.server.dao.service.Validator.validateId;
+import static com.sanshengshui.server.dao.service.Validator.validateString;
 
 /**
  * @author james mu
@@ -31,7 +32,9 @@ public class DeviceCredentialsServiceImpl implements DeviceCredentialsService{
 
     @Override
     public DeviceCredentials findDeviceCredentialsByCredentialsId(String credentialsId) {
-        return null;
+        log.trace("Executing findDeviceCredentialsByCredentialsId [{}]", credentialsId);
+        validateString(credentialsId, "Incorrect credentialsId " + credentialsId);
+        return deviceCredentialsDao.findByCredentialsId(credentialsId);
     }
 
     @Override

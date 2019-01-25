@@ -347,9 +347,9 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
         } else {
             ctx.writeAndFlush(createMqttConnAckMsg(CONNECTION_ACCEPTED));
             connected = true;
-            processor.process(new BasicTransportToDeviceSessionActorMsg(deviceSessionCtx.getDevice(),
-                    new BasicAdaptorToSessionActorMsg(deviceSessionCtx, new SessionOpenMsg())));
-            checkGatewaySession();
+//            processor.process(new BasicTransportToDeviceSessionActorMsg(deviceSessionCtx.getDevice(),
+//                    new BasicAdaptorToSessionActorMsg(deviceSessionCtx, new SessionOpenMsg())));
+//            checkGatewaySession();
         }
     }
 
@@ -389,7 +389,7 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
     private void processDisconnect(ChannelHandlerContext ctx) {
         ctx.close();
         if (connected) {
-            processor.process(SessionCloseMsg.onDisconnect(deviceSessionCtx.getSessionId()));
+//            processor.process(SessionCloseMsg.onDisconnect(deviceSessionCtx.getSessionId()));
             if (gatewaySessionCtx != null) {
                 gatewaySessionCtx.onGatewayDisconnect();
             }
@@ -459,6 +459,6 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
 
     @Override
     public void operationComplete(Future<? super Void> future) throws Exception {
-        processor.process(SessionCloseMsg.onError(deviceSessionCtx.getSessionId()));
+//        processor.process(SessionCloseMsg.onError(deviceSessionCtx.getSessionId()));
     }
 }

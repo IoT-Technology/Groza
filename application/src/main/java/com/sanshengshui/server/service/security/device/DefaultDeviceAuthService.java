@@ -2,6 +2,7 @@ package com.sanshengshui.server.service.security.device;
 
 import com.sanshengshui.server.common.data.Device;
 import com.sanshengshui.server.common.data.id.DeviceId;
+import com.sanshengshui.server.common.data.security.DeviceCredentials;
 import com.sanshengshui.server.common.data.security.DeviceCredentialsFilter;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthResult;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+
+import static com.sanshengshui.server.common.data.security.DeviceCredentialsType.X509_CERTIFICATE;
 
 /**
  * @author james mu
@@ -28,12 +31,33 @@ public class DefaultDeviceAuthService implements DeviceAuthService {
     DeviceCredentialsService deviceCredentialsService;
 
     @Override
-    public DeviceAuthResult process(DeviceCredentialsFilter credentials) {
-        return null;
+    public DeviceAuthResult process(DeviceCredentialsFilter credentialsFilter) {
+        log.trace("Lookup device credentials using filter {}", credentialsFilter);
+        DeviceCredentials credentials = deviceCredentialsService.findDeviceCredentialsByCredentialsId(credentialsFilter.getCredentialsId());
+        if (credentials != null) {
+            log.trace("Credentials found {}", credentials);
+            if (credentials.getCredentialsType() == credentialsFilter.getCredentialsType()) {
+                switch (credentials.getCredentialsType()) {
+                    case ACCESS_TOKEN:
+                        // Credentials ID matches Credentials value in this
+                        // primitive case;
+                        return DeviceAuthResult.of(credentials.getDeviceId());
+                    case X509_CERTIFICATE:
+                        return DeviceAuthResult.of(credentials.getDeviceId());
+                    default:
+                        return DeviceAuthResult.of("Credentials Type is not supported yet!");
+                }
+            } else {
+                return DeviceAuthResult.of("Credentials Type mismatch!");
+            }
+        } else {
+            log.trace("Credentials not found!");
+            return DeviceAuthResult.of("Credentials Not Found!");
+        }
     }
 
     @Override
     public Optional<Device> findDeviceById(DeviceId deviceId) {
-        return Optional.empty();
+        return Optional.ofNullable(deviceService.findDeviceById(deviceId));
     }
 }

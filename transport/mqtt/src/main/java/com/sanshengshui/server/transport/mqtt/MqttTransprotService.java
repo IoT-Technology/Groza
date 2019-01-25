@@ -29,6 +29,7 @@ import javax.annotation.PreDestroy;
 @ConditionalOnProperty(prefix = "mqtt", value = "enabled", havingValue = "true", matchIfMissing = false)
 @Slf4j
 public class MqttTransprotService {
+
     private static final String V1 = "v1";
     private static final String DEVICE = "device";
 
