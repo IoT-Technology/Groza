@@ -7,6 +7,4 @@ import com.sanshengshui.server.common.data.User;
  * @date 19-1-24 下午5:22
  */
 public class SecurityUser extends User {
-
-
 }

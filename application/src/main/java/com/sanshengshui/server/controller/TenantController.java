@@ -23,9 +23,13 @@ public class TenantController extends BaseController{
     @RequestMapping(value = "/tenant/{tenantId}", method = RequestMethod.GET)
     @ResponseBody
     public Tenant getTenantById(@PathVariable("tenantId") String strTenantId) throws GrozaException {
-        checkParameter("tenantId", strTenantId);
-        TenantId tenantId = new TenantId(toUUID(strTenantId));
-
+        try {
+            checkParameter("tenantId", strTenantId);
+            TenantId tenantId = new TenantId(toUUID(strTenantId));
+            return checkNotNull(tenantService.findTenantById(tenantId));
+        } catch (Exception e) {
+            throw handleException(e);
+        }
     }
 
     @ResponseBody

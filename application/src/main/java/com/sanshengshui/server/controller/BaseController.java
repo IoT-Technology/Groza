@@ -3,12 +3,9 @@ package com.sanshengshui.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
-import com.sanshengshui.server.common.data.id.TenantId;
-import com.sanshengshui.server.common.data.security.Authority;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.tenant.TenantService;
-import com.sanshengshui.server.service.security.model.SecurityUser;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 
-import static com.sanshengshui.server.dao.service.Validator.validateId;
 
 /**
  * @author james mu
@@ -46,15 +42,7 @@ public abstract class BaseController {
         }
     }
 
-    void checkTenantId(TenantId tenantId) throws GrozaException {
-        validateId(tenantId, INCORRECT_TENANT_ID + tenantId);
-        SecurityUser authUser = getCurrentUser();
-        if (authUser.getAuthority() != Authority.SYS_ADMIN &&
-                (authUser.getTenantId() == null || !authUser.getTenantId().equals(tenantId))) {
-            throw new GrozaException(YOU_DON_T_HAVE_PERMISSION_TO_PERFORM_THIS_OPERATION,
-                    GrozaErrorCode.PERMISSION_DENIED);
-        }
-    }
+
 
     UUID toUUID(String id) {
         return UUID.fromString(id);
