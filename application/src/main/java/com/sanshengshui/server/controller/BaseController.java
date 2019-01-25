@@ -7,11 +7,11 @@ import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.tenant.TenantService;
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.mail.MessagingException;
 import java.util.UUID;
 
 
