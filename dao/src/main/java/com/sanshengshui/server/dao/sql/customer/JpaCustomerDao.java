@@ -27,6 +27,7 @@ import static com.sanshengshui.server.dao.model.ModelConstants.NULL_UUID_STR;
 @Component
 @SqlDao
 public class JpaCustomerDao extends JpaAbstractSearchTextDao<CustomerEntity, Customer> implements CustomerDao {
+
     @Autowired
     private CustomerRepository customerRepository;
 
