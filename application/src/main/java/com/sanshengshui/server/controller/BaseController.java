@@ -3,6 +3,7 @@ package com.sanshengshui.server.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
+import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.tenant.TenantService;
@@ -41,6 +42,15 @@ public abstract class BaseController {
             throw new GrozaException("Parameter '" + name + "' can't be empty!", GrozaErrorCode.BAD_REQUEST_PARAMS);
         }
     }
+
+    TextPageLink createPageLink(int limit, String textSearch, String idOffset, String textOffset) {
+        UUID idOffsetUuid = null;
+        if (StringUtils.isNotEmpty(idOffset)) {
+            idOffsetUuid = toUUID(idOffset);
+        }
+        return new TextPageLink(limit, textSearch, idOffsetUuid, textOffset);
+    }
+
 
 
 
