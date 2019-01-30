@@ -8,6 +8,7 @@ import java.util.Optional;
  * @date 18-12-6 下午3:53
  */
 public interface KvEntry extends Serializable {
+
     String getKey();
 
     DataType getDataType();
