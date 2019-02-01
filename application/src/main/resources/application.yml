@@ -98,3 +98,38 @@ quota:
       log:
         topSize: 10
         intervalMin: 268
+
+# Audit log parameters
+audit_log:
+  # Enable/disable audit log functionality.
+  enabled: "${AUDIT_LOG_ENABLED:true}"
+  # Specify partitioning size for audit log by tenant id storage. Example MINUTES, HOURS, DAYS, MONTHS
+  by_tenant_partitioning: "${AUDIT_LOG_BY_TENANT_PARTITIONING:MONTHS}"
+  # Number of days as history period if startTime and endTime are not specified
+  default_query_period: "${AUDIT_LOG_DEFAULT_QUERY_PERIOD:30}"
+  # Logging levels per each entity type.
+  # Allowed values: OFF (disable), W (log write operations), RW (log read and write operations)
+  logging_level:
+    mask:
+      "device": "${AUDIT_LOG_MASK_DEVICE:W}"
+      "asset": "${AUDIT_LOG_MASK_ASSET:W}"
+      "dashboard": "${AUDIT_LOG_MASK_DASHBOARD:W}"
+      "customer": "${AUDIT_LOG_MASK_CUSTOMER:W}"
+      "user": "${AUDIT_LOG_MASK_USER:W}"
+      "rule_chain": "${AUDIT_LOG_MASK_RULE_CHAIN:W}"
+  sink:
+    # Type of external sink. possible options: none, elasticsearch
+    type: "${AUDIT_LOG_SINK_TYPE:none}"
+    # Name of the index where audit logs stored
+    # Index name could contain next placeholders (not mandatory):
+    # @{TENANT} - substituted by tenant ID
+    # @{DATE} - substituted by current date in format provided in audit_log.sink.date_format
+    index_pattern: "${AUDIT_LOG_SINK_INDEX_PATTERN:@{TENANT}_AUDIT_LOG_@{DATE}}"
+    # Date format. Details of the pattern could be found here:
+    # https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+    date_format: "${AUDIT_LOG_SINK_DATE_FORMAT:YYYY.MM.DD}"
+    scheme_name: "${AUDIT_LOG_SINK_SCHEME_NAME:http}" # http or https
+    host: "${AUDIT_LOG_SINK_HOST:localhost}"
+    port: "${AUDIT_LOG_SINK_POST:9200}"
+    user_name: "${AUDIT_LOG_SINK_USER_NAME:}"
+    password: "${AUDIT_LOG_SINK_PASSWORD:}"
