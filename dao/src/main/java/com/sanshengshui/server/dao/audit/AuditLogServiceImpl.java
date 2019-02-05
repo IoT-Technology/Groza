@@ -25,6 +25,7 @@ import com.sanshengshui.server.dao.entity.EntityService;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.service.DataValidator;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -54,7 +55,6 @@ public class AuditLogServiceImpl implements AuditLogService {
     @Autowired
     private AuditLogDao auditLogDao;
 
-    @Autowired
     private AuditLogLevelFilter auditLogLevelFilter;
 
     @Autowired
@@ -101,7 +101,42 @@ public class AuditLogServiceImpl implements AuditLogService {
 
     @Override
     public <E extends BaseData<I> & HasName, I extends UUIDBased & EntityId> ListenableFuture<List<Void>> logEntityAction(TenantId tenantId, CustomerId customerId, UserId userId, String userName, I entityId, E entity, ActionType actionType, Exception e, Object... additionalInfo) {
-        return null;
+        if (canLog(entityId.getEntityType(), actionType)) {
+            JsonNode actionData = constructActionData(entityId, entity, actionType, additionalInfo);
+            ActionStatus actionStatus = ActionStatus.SUCCESS;
+            String failureDetails = "";
+            String entityName = "";
+            if (entity != null) {
+                entityName = entity.getName();
+            } else {
+                try {
+                    entityName = entityService.fetchEntityNameAsync(entityId).get();
+                } catch (Exception ex) {}
+            }
+            if (e != null) {
+                actionStatus = ActionStatus.FAILURE;
+                failureDetails = getFailureStack(e);
+            }
+            if (actionType == ActionType.RPC_CALL) {
+                String rpcErrorString = extractParameter(String.class, additionalInfo);
+                if (!StringUtils.isEmpty(rpcErrorString)) {
+                    actionStatus = ActionStatus.FAILURE;
+                    failureDetails = rpcErrorString;
+                }
+            }
+            return logAction(tenantId,
+                    entityId,
+                    entityName,
+                    customerId,
+                    userId,
+                    userName,
+                    actionType,
+                    actionData,
+                    actionStatus,
+                    failureDetails);
+        } else {
+            return null;
+        }
     }
 
     private <E extends BaseData<I> & HasName, I extends UUIDBased & EntityId> JsonNode constructActionData(I entityId,
