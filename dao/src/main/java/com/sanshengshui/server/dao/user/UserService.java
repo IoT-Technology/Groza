@@ -7,7 +7,7 @@ import com.sanshengshui.server.common.data.id.TenantId;
 import com.sanshengshui.server.common.data.id.UserId;
 import com.sanshengshui.server.common.data.page.TextPageData;
 import com.sanshengshui.server.common.data.page.TextPageLink;
-import org.springframework.data.authentication.UserCredentials;
+import com.sanshengshui.server.common.data.security.UserCredentials;
 
 /**
  * @author james mu
