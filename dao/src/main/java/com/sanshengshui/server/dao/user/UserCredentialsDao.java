@@ -1,7 +1,7 @@
 package com.sanshengshui.server.dao.user;
 
+import com.sanshengshui.server.common.data.security.UserCredentials;
 import com.sanshengshui.server.dao.Dao;
-import org.springframework.data.authentication.UserCredentials;
 
 import java.util.UUID;
 
