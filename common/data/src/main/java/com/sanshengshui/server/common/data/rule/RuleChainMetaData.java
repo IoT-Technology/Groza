@@ -2,6 +2,7 @@ package com.sanshengshui.server.common.data.rule;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sanshengshui.server.common.data.id.RuleChainId;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
  * @date 19-2-1 下午3:31
  * @description
  */
+@Data
 public class RuleChainMetaData {
 
     private RuleChainId ruleChainId;
