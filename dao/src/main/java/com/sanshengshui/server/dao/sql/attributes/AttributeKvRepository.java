@@ -15,15 +15,10 @@ import java.util.List;
 @SqlDao
 public interface AttributeKvRepository extends CrudRepository<AttributeKvEntity,AttributeKvCompositeKey> {
 
-//    AttributeKvEntity findOne(AttributeKvCompositeKey attributeKvCompositeKey);
 
     List<AttributeKvEntity> findAllByEntityTypeAndEntityIdAndAttributeType(EntityType entityType,
                                                                            String entityId,
                                                                            String attributeType);
 
-//    List<AttributeKvEntity> findAll(List<AttributeKvCompositeKey> attributeKvCompositeKeyList);
-
-
-//    int delete(List<AttributeKvEntity> entitiesToDelete);
 
 }
