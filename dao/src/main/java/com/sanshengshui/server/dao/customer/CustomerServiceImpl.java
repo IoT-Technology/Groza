@@ -7,17 +7,24 @@ import com.sanshengshui.server.common.data.Customer;
 import com.sanshengshui.server.common.data.Tenant;
 import com.sanshengshui.server.common.data.id.CustomerId;
 import com.sanshengshui.server.common.data.id.TenantId;
+import com.sanshengshui.server.common.data.page.TextPageLink;
+import com.sanshengshui.server.dao.asset.AssetService;
+import com.sanshengshui.server.dao.device.DeviceService;
+import com.sanshengshui.server.dao.entity.AbstractEntityService;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.service.DataValidator;
+import com.sanshengshui.server.dao.service.PaginatedRemover;
 import com.sanshengshui.server.dao.service.Validator;
 import com.sanshengshui.server.dao.tenant.TenantDao;
+import com.sanshengshui.server.dao.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static com.sanshengshui.server.dao.service.Validator.validateId;
@@ -28,7 +35,7 @@ import static com.sanshengshui.server.dao.service.Validator.validateId;
  */
 @Service
 @Slf4j
-public class CustomerServiceImpl implements CustomerService {
+public class CustomerServiceImpl extends AbstractEntityService implements CustomerService {
 
     private static final String PUBLIC_CUSTOMER_TITLE = "Public";
     public static final String INCORRECT_CUSTOMER_ID = "Incorrect customerId ";
@@ -38,7 +45,17 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDao customerDao;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TenantDao tenantDao;
+
+    @Autowired
+    private AssetService assetService;
+
+    @Autowired
+    private DeviceService deviceService;
+
 
     @Override
     public Customer findCustomerById(CustomerId customerId) {
@@ -71,7 +88,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomer(CustomerId customerId) {
-        //TODO customer need something to do
+        log.trace("Executing deleteCustomer [{}]", customerId);
+        Validator.validateId(customerId, INCORRECT_CUSTOMER_ID + customerId);
+        Customer customer = findCustomerById(customerId);
+        if (customer == null) {
+            throw new IncorrectParameterException("Unable to delete non-existent customer.");
+        }
+        assetService.unassignCustomerAssets(customer.getTenantId(), customerId);
+        deviceService.unassignCustomerDevices(customer.getTenantId(), customerId);
+        userService.deleteCustomerUsers(customer.getTenantId(), customerId);
+        deleteEntityRelations(customerId);
+        customerDao.removeById(customerId.getId());
     }
 
     @Override
@@ -96,8 +123,24 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomersByTenantId(TenantId tenantId) {
-
+        log.trace("Executing deleteCustomersByTenantId, tenantId [{}]", tenantId);
+        Validator.validateId(tenantId, "Incorrect tenantId " + tenantId);
+        customersByTenantRemover.removeEntities(tenantId);
     }
+
+    private PaginatedRemover<TenantId, Customer> customersByTenantRemover =
+            new PaginatedRemover<TenantId, Customer>() {
+
+                @Override
+                protected List<Customer> findEntities(TenantId id, TextPageLink pageLink) {
+                    return customerDao.findCustomersByTenantId(id.getId(), pageLink);
+                }
+
+                @Override
+                protected void removeEntity(Customer entity) {
+                    deleteCustomer(new CustomerId(entity.getUuidId()));
+                }
+            };
 
     private DataValidator<Customer> customerValidator =
             new DataValidator<Customer>() {
