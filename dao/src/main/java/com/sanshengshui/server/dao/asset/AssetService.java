@@ -3,6 +3,7 @@ package com.sanshengshui.server.dao.asset;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.sanshengshui.server.common.data.EntitySubtype;
 import com.sanshengshui.server.common.data.asset.Asset;
+import com.sanshengshui.server.common.data.asset.AssetSearchQuery;
 import com.sanshengshui.server.common.data.id.AssetId;
 import com.sanshengshui.server.common.data.id.CustomerId;
 import com.sanshengshui.server.common.data.id.TenantId;
@@ -10,6 +11,7 @@ import com.sanshengshui.server.common.data.page.TextPageData;
 import com.sanshengshui.server.common.data.page.TextPageLink;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author james mu
@@ -21,7 +23,7 @@ public interface AssetService {
 
     ListenableFuture<Asset> findAssetByIdAsync(AssetId assetId);
 
-    Asset findAssetByTenantIdAndName(TenantId tenantId, String name);
+    Optional<Asset> findAssetByTenantIdAndName(TenantId tenantId, String name);
 
     Asset saveAsset(Asset asset);
 
@@ -47,7 +49,7 @@ public interface AssetService {
 
     void unassignCustomerAssets(TenantId tenantId, CustomerId customerId);
 
-//    ListenableFuture<List<Asset>> findAssetsByQuery(AssetSearchQuery query);
+    ListenableFuture<List<Asset>> findAssetsByQuery(AssetSearchQuery query);
 
     ListenableFuture<List<EntitySubtype>> findAssetTypesByTenantId(TenantId tenantId);
 }
