@@ -28,6 +28,7 @@
         <module>common</module>
         <module>dao</module>
         <module>tools</module>
+        <module>ui</module>
     </modules>
     <packaging>pom</packaging>
 
