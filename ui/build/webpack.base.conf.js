@@ -91,6 +91,9 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    disableHostCheck: true
+  },
   plugins: [new VueLoaderPlugin()],
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
