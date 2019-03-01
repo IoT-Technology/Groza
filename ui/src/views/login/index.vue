@@ -1,7 +1,8 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
-      <h3 class="title">Groza</h3>
+      <h3 class="title">Groza - IOT Platform</h3>
+      <p class="login-tip">Log in to See Amazing Groza.</p>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="Username(email)">
           <svg-icon slot="prefix" icon-class="email" class="el-input__icon" style="height: 39px;width: 13px;margin-left: 2px;" />
@@ -14,12 +15,11 @@
       </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">Remember Password</el-checkbox>
       <el-form-item style="width:100%;">
-        <el-button :loading="loading" size="medium" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
+        <el-button :loading="loading" size="medium" type="success" style="width:100%;" @click.native.prevent="handleLogin">
           <span v-if="!loading">LOGIN</span>
           <span v-else>Login...</span>
         </el-button>
       </el-form-item>
-      <!--<p class="login-tip">系统默认用户名：admin，密码：123456</p>-->
     </el-form>
   </div>
 </template>
@@ -112,24 +112,24 @@ export default {
   .title {
     margin: 0px auto 40px auto;
     text-align: center;
-    color: #707070;
+    color: #ffffff;
   }
 
   .login-form {
     border-radius: 6px;
-    background: #ffffff;
-    width: 365px;
+    background: #22A7FF;
+    width: 30%;
     padding: 25px 25px 5px 25px;
     .el-input {
-      height: 38px;
+      height: 30px;
       input {
-        height: 38px;
+        height: 30px;
       }
     }
   }
   .login-tip {
-    font-size: 13px;
+    font-size: 15px;
     text-align: center;
-    color: #bfbfbf;
+    color: #EEEEEE;
   }
 </style>
