@@ -38,8 +38,8 @@ export default {
         rememberMe: false
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '用户名不能为空' }],
-        password: [{ required: true, trigger: 'blur', message: '密码不能为空' }]
+        username: [{ required: true, trigger: 'blur', message: 'Username can not be empty' }],
+        password: [{ required: true, trigger: 'blur', message: 'Password can not be empty' }]
       },
       loading: false,
       redirect: undefined
