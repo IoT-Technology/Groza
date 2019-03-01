@@ -12,7 +12,7 @@ const whiteList = ['/login']// no redirect whitelist
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title + ' - eladmin'
+    document.title = 'Groza- IOT Platform'
   }
   NProgress.start() // start progress bar
   if (getToken()) {
