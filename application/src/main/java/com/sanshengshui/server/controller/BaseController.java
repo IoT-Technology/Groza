@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
 import com.sanshengshui.server.common.data.page.TextPageLink;
+import com.sanshengshui.server.dao.asset.AssetService;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.tenant.TenantService;
@@ -29,6 +30,9 @@ public abstract class BaseController {
 
     @Autowired
     protected TenantService tenantService;
+
+    @Autowired
+    protected AssetService assetService;
 
     <T> T checkNotNull(T reference) throws GrozaException {
         if (reference == null) {

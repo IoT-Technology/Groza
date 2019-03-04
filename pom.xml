@@ -70,6 +70,7 @@
         <elasticsearch.version>5.0.2</elasticsearch.version>
         <spring-data-redis.version>1.8.10.RELEASE</spring-data-redis.version>
         <jedis.version>2.9.0</jedis.version>
+        <jjwt.version>0.7.0</jjwt.version>
     </properties>
 
 
@@ -230,6 +231,11 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

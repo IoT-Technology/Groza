@@ -98,6 +98,10 @@
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
