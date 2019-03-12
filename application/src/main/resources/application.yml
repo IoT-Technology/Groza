@@ -2,6 +2,14 @@
 http:
   request_timeout: 60000
 # MQTT server parameters
+
+#JWT Token parameters
+security.jwt:
+  tokenExpirationTime: "${JWT_TOKEN_EXPIRATION_TIME:900}" # Number of seconds (15 mins)
+  refreshTokenExpTime: "${JWT_REFRESH_TOKEN_EXPIRATION_TIME:3600}" # Seconds (1 hour)
+  tokenIssuer: "${JWT_TOKEN_ISSUER: grozacloud.com}"
+  tokenSigningKey: "${JWT_TOKEN_SIGNING_KEY:grozaDefaultSigningKey}"
+
 mqtt:
   # Enable/disable mqtt transport protocol.
   enabled: true
