@@ -1,9 +1,15 @@
 package com.sanshengshui.server.config;
 
+import com.sanshengshui.server.exception.GrozaErrorResponseHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 /**
  * @author james mu
@@ -26,5 +32,13 @@ public class GrozaSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected static final String[] NON_TOKEN_BASED_AUTH_ENTRY_POINTS = new String[] {"/index.html", "/static/**", "/api/noauth/**", "/webjars/**"};
     public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/api/**";
     public static final String WS_TOKEN_BASED_AUTH_ENTRY_POINT = "/api/ws/**";
+
+    @Autowired
+    private GrozaErrorResponseHandler restAccessDeniedHandler;
+
+    private AuthenticationSuccessHandler successHandler;
+
+    private AuthenticationFailureHandler failureHandler;
+
 
 }
