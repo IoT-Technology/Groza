@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.rest;
+package com.sanshengshui.server.service.security.auth.jwt;
 
 import com.sanshengshui.server.common.data.Customer;
 import com.sanshengshui.server.common.data.User;
@@ -24,57 +24,57 @@ import com.sanshengshui.server.common.data.security.Authority;
 import com.sanshengshui.server.common.data.security.UserCredentials;
 import com.sanshengshui.server.dao.customer.CustomerService;
 import com.sanshengshui.server.dao.user.UserService;
+import com.sanshengshui.server.service.security.auth.RefreshAuthenticationToken;
 import com.sanshengshui.server.service.security.model.SecurityUser;
 import com.sanshengshui.server.service.security.model.UserPrincipal;
+import com.sanshengshui.server.service.security.model.token.JwtTokenFactory;
+import com.sanshengshui.server.service.security.model.token.RawAccessJwtToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.*;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.UUID;
 
 @Component
-public class RestAuthenticationProvider implements AuthenticationProvider {
+public class RefreshTokenAuthenticationProvider implements AuthenticationProvider {
 
-    private final BCryptPasswordEncoder encoder;
+    private final JwtTokenFactory tokenFactory;
     private final UserService userService;
     private final CustomerService customerService;
 
     @Autowired
-    public RestAuthenticationProvider(final UserService userService, final CustomerService customerService, final BCryptPasswordEncoder encoder) {
+    public RefreshTokenAuthenticationProvider(final UserService userService, final CustomerService customerService, final JwtTokenFactory tokenFactory) {
         this.userService = userService;
         this.customerService = customerService;
-        this.encoder = encoder;
+        this.tokenFactory = tokenFactory;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Assert.notNull(authentication, "No authentication data provided");
-
-        Object principal = authentication.getPrincipal();
-        if (!(principal instanceof UserPrincipal)) {
-            throw new BadCredentialsException("Authentication Failed. Bad user principal.");
-        }
-
-        UserPrincipal userPrincipal =  (UserPrincipal) principal;
-        if (userPrincipal.getType() == UserPrincipal.Type.USER_NAME) {
-            String username = userPrincipal.getValue();
-            String password = (String) authentication.getCredentials();
-            return authenticateByUsernameAndPassword(userPrincipal, username, password);
+        RawAccessJwtToken rawAccessToken = (RawAccessJwtToken) authentication.getCredentials();
+        SecurityUser unsafeUser = tokenFactory.parseRefreshToken(rawAccessToken);
+        UserPrincipal principal = unsafeUser.getUserPrincipal();
+        SecurityUser securityUser;
+        if (principal.getType() == UserPrincipal.Type.USER_NAME) {
+            securityUser = authenticateByUserId(unsafeUser.getId());
         } else {
-            String publicId = userPrincipal.getValue();
-            return authenticateByPublicId(userPrincipal, publicId);
+            securityUser = authenticateByPublicId(principal.getValue());
         }
+        return new RefreshAuthenticationToken(securityUser);
     }
 
-    private Authentication authenticateByUsernameAndPassword(UserPrincipal userPrincipal, String username, String password) {
-        User user = userService.findUserByEmail(username);
+    private SecurityUser authenticateByUserId(UserId userId) {
+        User user = userService.findUserById(userId);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found: " + username);
+            throw new UsernameNotFoundException("User not found by refresh token");
         }
 
         UserCredentials userCredentials = userService.findUserCredentialsByUserId(user.getId());
@@ -86,31 +86,31 @@ public class RestAuthenticationProvider implements AuthenticationProvider {
             throw new DisabledException("User is not active");
         }
 
-        if (!encoder.matches(password, userCredentials.getPassword())) {
-            throw new BadCredentialsException("Authentication Failed. Username or Password not valid.");
-        }
-
         if (user.getAuthority() == null) throw new InsufficientAuthenticationException("User has no authority assigned");
+
+        UserPrincipal userPrincipal = new UserPrincipal(UserPrincipal.Type.USER_NAME, user.getEmail());
 
         SecurityUser securityUser = new SecurityUser(user, userCredentials.isEnabled(), userPrincipal);
 
-        return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
+        return securityUser;
     }
 
-    private Authentication authenticateByPublicId(UserPrincipal userPrincipal, String publicId) {
+    private SecurityUser authenticateByPublicId(String publicId) {
         CustomerId customerId;
         try {
             customerId = new CustomerId(UUID.fromString(publicId));
         } catch (Exception e) {
-            throw new BadCredentialsException("Authentication Failed. Public Id is not valid.");
+            throw new BadCredentialsException("Refresh token is not valid");
         }
         Customer publicCustomer = customerService.findCustomerById(customerId);
         if (publicCustomer == null) {
-            throw new UsernameNotFoundException("Public entity not found: " + publicId);
+            throw new UsernameNotFoundException("Public entity not found by refresh token");
         }
+
         if (!publicCustomer.isPublic()) {
-            throw new BadCredentialsException("Authentication Failed. Public Id is not valid.");
+            throw new BadCredentialsException("Refresh token is not valid");
         }
+
         User user = new User(new UserId(EntityId.NULL_UUID));
         user.setTenantId(publicCustomer.getTenantId());
         user.setCustomerId(publicCustomer.getId());
@@ -119,13 +119,15 @@ public class RestAuthenticationProvider implements AuthenticationProvider {
         user.setFirstName("Public");
         user.setLastName("Public");
 
+        UserPrincipal userPrincipal = new UserPrincipal(UserPrincipal.Type.PUBLIC_ID, publicId);
+
         SecurityUser securityUser = new SecurityUser(user, true, userPrincipal);
 
-        return new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
+        return securityUser;
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
+        return (RefreshAuthenticationToken.class.isAssignableFrom(authentication));
     }
 }

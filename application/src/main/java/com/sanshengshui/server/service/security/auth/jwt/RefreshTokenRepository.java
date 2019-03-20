@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.jwt;
+package com.sanshengshui.server.service.security.auth.jwt;
 
 import com.sanshengshui.server.service.security.model.SecurityUser;
 import com.sanshengshui.server.service.security.model.token.JwtToken;

@@ -13,20 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.jwt;
+package com.sanshengshui.server.service.security.auth.jwt.extractor;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.servlet.http.HttpServletRequest;
 
-public class RefreshTokenRequest {
-    private String refreshToken;
-
-    @JsonCreator
-    public RefreshTokenRequest(@JsonProperty("refreshToken") String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public String getRefreshToken() {
-        return refreshToken;
-    }
+public interface TokenExtractor {
+    public String extract(HttpServletRequest request);
 }

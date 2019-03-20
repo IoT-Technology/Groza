@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.rest;
+package com.sanshengshui.server.service.security.auth.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sanshengshui.server.service.security.auth.RefreshAuthenticationToken;
 import com.sanshengshui.server.service.security.exception.AuthMethodNotSupportedException;
-import com.sanshengshui.server.service.security.model.UserPrincipal;
+import com.sanshengshui.server.service.security.model.token.RawAccessJwtToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,15 +37,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-public class RestLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
+public class RefreshTokenProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     private final AuthenticationSuccessHandler successHandler;
     private final AuthenticationFailureHandler failureHandler;
 
     private final ObjectMapper objectMapper;
 
-    public RestLoginProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
-                                     AuthenticationFailureHandler failureHandler, ObjectMapper mapper) {
+    public RefreshTokenProcessingFilter(String defaultProcessUrl, AuthenticationSuccessHandler successHandler,
+                                        AuthenticationFailureHandler failureHandler, ObjectMapper mapper) {
         super(defaultProcessUrl);
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
@@ -62,22 +62,20 @@ public class RestLoginProcessingFilter extends AbstractAuthenticationProcessingF
             throw new AuthMethodNotSupportedException("Authentication method not supported");
         }
 
-        LoginRequest loginRequest;
+        RefreshTokenRequest refreshTokenRequest;
         try {
-            loginRequest = objectMapper.readValue(request.getReader(), LoginRequest.class);
+            refreshTokenRequest = objectMapper.readValue(request.getReader(), RefreshTokenRequest.class);
         } catch (Exception e) {
-            throw new AuthenticationServiceException("Invalid login request payload");
+            throw new AuthenticationServiceException("Invalid refresh token request payload");
         }
 
-        if (StringUtils.isBlank(loginRequest.getUsername()) || StringUtils.isBlank(loginRequest.getPassword())) {
-            throw new AuthenticationServiceException("Username or Password not provided");
+        if (StringUtils.isBlank(refreshTokenRequest.getRefreshToken())) {
+            throw new AuthenticationServiceException("Refresh token is not provided");
         }
 
-        UserPrincipal principal = new UserPrincipal(UserPrincipal.Type.USER_NAME, loginRequest.getUsername());
+        RawAccessJwtToken token = new RawAccessJwtToken(refreshTokenRequest.getRefreshToken());
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, loginRequest.getPassword());
-
-        return this.getAuthenticationManager().authenticate(token);
+        return this.getAuthenticationManager().authenticate(new RefreshAuthenticationToken(token));
     }
 
     @Override

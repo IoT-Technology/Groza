@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.jwt;
+package com.sanshengshui.server.service.security.auth.jwt;
 
 import com.sanshengshui.server.service.security.auth.JwtAuthenticationToken;
 import com.sanshengshui.server.service.security.model.token.RawAccessJwtToken;
-import com.sanshengshui.server.service.security.model.token.jwt.extractor.TokenExtractor;
+import com.sanshengshui.server.service.security.auth.jwt.extractor.TokenExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

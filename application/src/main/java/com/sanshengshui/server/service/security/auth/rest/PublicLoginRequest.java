@@ -13,10 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.jwt.extractor;
+package com.sanshengshui.server.service.security.auth.rest;
 
-import javax.servlet.http.HttpServletRequest;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public interface TokenExtractor {
-    public String extract(HttpServletRequest request);
+public class PublicLoginRequest {
+
+    private String publicId;
+
+    @JsonCreator
+    public PublicLoginRequest(@JsonProperty("publicId") String publicId) {
+        this.publicId = publicId;
+   }
+
+    public String getPublicId() {
+        return publicId;
+    }
+
 }

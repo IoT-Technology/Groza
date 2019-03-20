@@ -13,22 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.sanshengshui.server.service.security.model.token.rest;
+package com.sanshengshui.server.service.security.auth.jwt;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PublicLoginRequest {
-
-    private String publicId;
+public class RefreshTokenRequest {
+    private String refreshToken;
 
     @JsonCreator
-    public PublicLoginRequest(@JsonProperty("publicId") String publicId) {
-        this.publicId = publicId;
-   }
-
-    public String getPublicId() {
-        return publicId;
+    public RefreshTokenRequest(@JsonProperty("refreshToken") String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 }
