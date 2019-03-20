@@ -2,7 +2,9 @@ package com.sanshengshui.server.controller;
 
 import com.sanshengshui.server.common.data.asset.Asset;
 import com.sanshengshui.server.common.data.exception.GrozaException;
+import com.sanshengshui.server.common.data.id.AssetId;
 import com.sanshengshui.server.common.data.page.TextPageData;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,10 +13,24 @@ import org.springframework.web.bind.annotation.*;
  * @description
  */
 @RestController
-@RequestMapping
+@RequestMapping("/api")
 public class AssetController extends BaseController{
 
     public static final String ASSET_ID = "assetId";
+
+    @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @RequestMapping(value = "/asset/{assetId}", method = RequestMethod.GET)
+    @ResponseBody
+    public Asset getAssetById(@PathVariable(ASSET_ID) String strAssetId) throws GrozaException {
+        checkParameter(ASSET_ID, strAssetId);
+        try {
+            AssetId assetId = new AssetId(toUUID(strAssetId));
+            return checkAssetId(assetId);
+        } catch (Exception e){
+            throw handleException(e);
+        }
+
+    }
 
     @RequestMapping(value = "/asset", method = RequestMethod.POST)
     @ResponseBody
