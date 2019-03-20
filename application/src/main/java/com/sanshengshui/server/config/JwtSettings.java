@@ -1,7 +1,6 @@
 package com.sanshengshui.server.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
  * @description
  */
 @Configuration
-@EnableConfigurationProperties(JwtSettings.class)
 @ConfigurationProperties(prefix = "security.jwt")
 public class JwtSettings {
     /**
@@ -31,7 +29,7 @@ public class JwtSettings {
     /**
      * {@link com.sanshengshui.server.service.security.model.token.JwtToken} can be refreshed during this timeframe
      */
-    private String refreshTokenExpTime;
+    private Integer refreshTokenExpTime;
 
     public Integer getTokenExpirationTime() {
         return tokenExpirationTime;
@@ -57,11 +55,11 @@ public class JwtSettings {
         this.tokenSigningKey = tokenSigningKey;
     }
 
-    public String getRefreshTokenExpTime() {
+    public Integer getRefreshTokenExpTime() {
         return refreshTokenExpTime;
     }
 
-    public void setRefreshTokenExpTime(String refreshTokenExpTime) {
+    public void setRefreshTokenExpTime(Integer refreshTokenExpTime) {
         this.refreshTokenExpTime = refreshTokenExpTime;
     }
 }

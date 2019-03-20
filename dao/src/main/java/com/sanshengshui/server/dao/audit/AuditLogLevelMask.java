@@ -11,7 +11,7 @@ import lombok.Getter;
 public enum  AuditLogLevelMask {
 
     OFF(false, false),
-    w(true, false),
+    W(true, false),
     RW(true, true);
 
     private final boolean write;

@@ -1,7 +1,6 @@
 package com.sanshengshui.server.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 
@@ -14,7 +13,6 @@ import java.util.Map;
  * @description
  */
 @Configuration
-@EnableConfigurationProperties(MvcCorsProperties.class)
 @ConfigurationProperties(prefix = "spring.mvc.cors")
 public class MvcCorsProperties {
     private Map<String, CorsConfiguration> mappings = new HashMap<>();
