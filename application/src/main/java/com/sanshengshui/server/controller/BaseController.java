@@ -2,18 +2,17 @@ package com.sanshengshui.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sanshengshui.server.common.data.Customer;
+import com.sanshengshui.server.common.data.Device;
 import com.sanshengshui.server.common.data.asset.Asset;
 import com.sanshengshui.server.common.data.audit.ActionType;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
-import com.sanshengshui.server.common.data.id.AssetId;
-import com.sanshengshui.server.common.data.id.CustomerId;
-import com.sanshengshui.server.common.data.id.EntityIdFactory;
-import com.sanshengshui.server.common.data.id.TenantId;
+import com.sanshengshui.server.common.data.id.*;
 import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.common.data.security.Authority;
 import com.sanshengshui.server.dao.asset.AssetService;
 import com.sanshengshui.server.dao.customer.CustomerService;
+import com.sanshengshui.server.dao.device.DeviceService;
 import com.sanshengshui.server.dao.exception.DataValidationException;
 import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.model.ModelConstants;
@@ -52,6 +51,9 @@ public abstract class BaseController {
     @Autowired
     protected CustomerService customerService;
 
+    @Autowired
+    protected DeviceService deviceService;
+
     <T> T checkNotNull(T reference) throws GrozaException {
         if (reference == null) {
             throw new GrozaException("Requested item wasn't found!", GrozaErrorCode.ITEM_NOT_FOUND);
@@ -81,6 +83,26 @@ public abstract class BaseController {
         checkTenantId(asset.getTenantId());
         if (asset.getCustomerId() != null && !asset.getCustomerId().getId().equals(ModelConstants.NULL_UUID)) {
             checkCustomerId(asset.getCustomerId());
+        }
+    }
+
+    Device checkDeviceId(DeviceId deviceId) throws GrozaException{
+        try {
+            validateId(deviceId, "Incorrect deviceId " + deviceId);
+            Device device = deviceService.findDeviceById(deviceId);
+            checkDevice(device);
+            return device;
+        } catch (Exception e) {
+            throw handleException(e, false);
+        }
+
+    }
+
+    protected void checkDevice(Device device) throws GrozaException {
+        checkNotNull(device);
+        checkTenantId(device.getTenantId());
+        if (device.getCustomerId() != null && !device.getCustomerId().getId().equals(ModelConstants.NULL_UUID)) {
+            checkCustomerId(device.getCustomerId());
         }
     }
 
