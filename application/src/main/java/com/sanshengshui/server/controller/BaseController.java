@@ -1,8 +1,7 @@
 package com.sanshengshui.server.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sanshengshui.server.common.data.Customer;
-import com.sanshengshui.server.common.data.Device;
+import com.sanshengshui.server.common.data.*;
 import com.sanshengshui.server.common.data.asset.Asset;
 import com.sanshengshui.server.common.data.audit.ActionType;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
@@ -11,6 +10,7 @@ import com.sanshengshui.server.common.data.id.*;
 import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.common.data.security.Authority;
 import com.sanshengshui.server.dao.asset.AssetService;
+import com.sanshengshui.server.dao.audit.AuditLogService;
 import com.sanshengshui.server.dao.customer.CustomerService;
 import com.sanshengshui.server.dao.device.DeviceService;
 import com.sanshengshui.server.dao.exception.DataValidationException;
@@ -53,6 +53,9 @@ public abstract class BaseController {
 
     @Autowired
     protected DeviceService deviceService;
+
+    @Autowired
+    protected AuditLogService auditLogService;
 
     <T> T checkNotNull(T reference) throws GrozaException {
         if (reference == null) {
@@ -187,6 +190,24 @@ public abstract class BaseController {
         } else {
             return new GrozaException(exception.getMessage(), GrozaErrorCode.GENERAL);
         }
+    }
+
+    protected <E extends BaseData<I> & HasName,
+            I extends UUIDBased & EntityId> void logEntityAction(I entityId, E entity, CustomerId customerId,
+                                                                 ActionType actionType, Exception e, Object... additionalInfo) throws GrozaException {
+        logEntityAction(getCurrentUser(), entityId, entity, customerId, actionType, e, additionalInfo);
+    }
+
+    protected <E extends BaseData<I> & HasName,
+            I extends UUIDBased & EntityId> void logEntityAction(User user, I entityId, E entity, CustomerId customerId,
+                                                                 ActionType actionType, Exception e, Object... additionalInfo) throws GrozaException {
+        if (customerId == null || customerId.isNullUid()) {
+            customerId = user.getCustomerId();
+        }
+//        if (e == null) {
+//            pushEntityActionToRuleEngine(entityId, entity, user, customerId, actionType, additionalInfo);
+//        }
+        auditLogService.logEntityAction(user.getTenantId(), customerId, user.getId(), user.getName(), entityId, entity, actionType, e, additionalInfo);
     }
 
 
