@@ -5,6 +5,9 @@ import com.sanshengshui.server.common.data.audit.ActionType;
 import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
 import com.sanshengshui.server.common.data.id.DeviceId;
+import com.sanshengshui.server.common.data.id.TenantId;
+import com.sanshengshui.server.common.data.page.TextPageData;
+import com.sanshengshui.server.common.data.page.TextPageLink;
 import com.sanshengshui.server.common.data.security.Authority;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,29 @@ public class DeviceController extends BaseController {
         } catch (Exception e) {
             throw handleException(e);
         }
+    }
+
+    @PreAuthorize("hasAuthority('TENANT_ADMIN')")
+    @RequestMapping(value = "/tenant/devices", params = {"limit"}, method = RequestMethod.GET)
+    @ResponseBody
+    public TextPageData<Device> getTenantDevices(
+            @RequestParam int limit,
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String textSearch,
+            @RequestParam(required = false) String idOffset,
+            @RequestParam(required = false) String textOffset) throws GrozaException {
+        try {
+            TenantId tenantId = getCurrentUser().getTenantId();
+            TextPageLink pageLink = createPageLink(limit, textSearch, idOffset, textOffset);
+            if (type != null && type.trim().length() > 0) {
+                return checkNotNull(deviceService.findDevicesByTenantIdAndType(tenantId, type, pageLink));
+            } else {
+                return checkNotNull(deviceService.findDevicesByTenantId(tenantId, pageLink));
+            }
+        } catch (Exception e) {
+            throw handleException(e);
+        }
+
     }
 
 }
