@@ -8,6 +8,7 @@ import com.sanshengshui.server.common.data.exception.GrozaErrorCode;
 import com.sanshengshui.server.common.data.exception.GrozaException;
 import com.sanshengshui.server.common.data.id.*;
 import com.sanshengshui.server.common.data.page.TextPageLink;
+import com.sanshengshui.server.common.data.page.TimePageLink;
 import com.sanshengshui.server.common.data.security.Authority;
 import com.sanshengshui.server.dao.asset.AssetService;
 import com.sanshengshui.server.dao.audit.AuditLogService;
@@ -149,6 +150,14 @@ public abstract class BaseController {
         } else {
             throw new GrozaException("You aren't authorized to perform this operation!", GrozaErrorCode.AUTHENTICATION);
         }
+    }
+
+    TimePageLink createPageLink(int limit, Long startTime, Long endTime, boolean ascOrder, String idOffset) {
+        UUID idOffsetUuid = null;
+        if (StringUtils.isNotEmpty(idOffset)) {
+            idOffsetUuid = toUUID(idOffset);
+        }
+        return new TimePageLink(limit, startTime, endTime, ascOrder, idOffsetUuid);
     }
 
     TextPageLink createPageLink(int limit, String textSearch, String idOffset, String textOffset) {
