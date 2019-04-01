@@ -1,19 +1,24 @@
 package com.sanshengshui.server.transport.coap;
 
 import com.sanshengshui.server.common.data.id.SessionId;
+import com.sanshengshui.server.common.data.security.DeviceCredentialsFilter;
+import com.sanshengshui.server.common.data.security.DeviceTokenCredentials;
 import com.sanshengshui.server.common.msg.session.*;
 import com.sanshengshui.server.common.transport.SessionMsgProcessor;
 import com.sanshengshui.server.common.transport.adaptor.AdaptorException;
 import com.sanshengshui.server.common.transport.auth.DeviceAuthService;
 import com.sanshengshui.server.common.transport.quota.QuotaService;
 import com.sanshengshui.server.transport.coap.adaptors.CoapTransportAdaptor;
+import com.sanshengshui.server.transport.coap.session.CoapExchangeObserverProxy;
 import com.sanshengshui.server.transport.coap.session.CoapSessionCtx;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.coap.CoAP;
 import org.eclipse.californium.core.coap.Request;
 import org.eclipse.californium.core.network.Exchange;
+import org.eclipse.californium.core.network.ExchangeObserver;
 import org.eclipse.californium.core.server.resources.CoapExchange;
+import org.eclipse.californium.core.server.resources.Resource;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -33,6 +38,7 @@ public class CoapTransportResource extends CoapResource {
     private final SessionMsgProcessor processor;
     private final DeviceAuthService authService;
     private final QuotaService quotaService;
+    private final Field observerField;
     private final long timeout;
 
     public CoapTransportResource(SessionMsgProcessor processor, DeviceAuthService authService, CoapTransportAdaptor adaptor, String name,
@@ -44,6 +50,8 @@ public class CoapTransportResource extends CoapResource {
         this.adaptor = adaptor;
         this.timeout = timeout;
         this.setObservable(false);
+        observerField = ReflectionUtils.findField(Exchange.class, "observer");
+        observerField.setAccessible(true);
     }
 
     @Override
@@ -61,11 +69,28 @@ public class CoapTransportResource extends CoapResource {
             log.trace("Can't fetch/subscribe to timeseries updates");
             exchange.respond(CoAP.ResponseCode.BAD_REQUEST);
         } else if (exchange.getRequestOptions().hasObserve()) {
+            processExchangeGetRequest(exchange, featureType.get());
         } else if (featureType.get() == FeatureType.ATTRIBUTES) {
             processRequest(exchange, SessionMsgType.GET_ATTRIBUTES_REQUEST);
         } else {
             log.trace("Invalid feature type parameter");
             exchange.respond(CoAP.ResponseCode.BAD_REQUEST);
+        }
+    }
+
+    private void processExchangeGetRequest(CoapExchange exchange, FeatureType featureType) {
+        boolean unsubscribe = exchange.getRequestOptions().getObserve() == 1;
+        SessionMsgType sessionMsgType;
+        if (featureType == FeatureType.RPC) {
+            sessionMsgType = unsubscribe ? SessionMsgType.UNSUBSCRIBE_RPC_COMMANDS_REQUEST : SessionMsgType.SUBSCRIBE_RPC_COMMANDS_REQUEST;
+        } else {
+            sessionMsgType = unsubscribe ? SessionMsgType.UNSUBSCRIBE_ATTRIBUTES_REQUEST : SessionMsgType.SUBSCRIBE_ATTRIBUTES_REQUEST;
+        }
+        Optional<SessionId> sessionId = processRequest(exchange, sessionMsgType);
+        if (sessionId.isPresent()) {
+            if (exchange.getRequestOptions().getObserve() == 1) {
+                exchange.respond(CoAP.ResponseCode.VALID);
+            }
         }
     }
 
@@ -101,9 +126,14 @@ public class CoapTransportResource extends CoapResource {
         Exchange advanced = exchange.advanced();
         Request request = advanced.getRequest();
 
+        Optional<DeviceCredentialsFilter> credentials = decodeCredentials(request);
+        if (!credentials.isPresent()) {
+            exchange.respond(CoAP.ResponseCode.BAD_REQUEST);
+            return Optional.empty();
+        }
+
 
         CoapSessionCtx ctx = new CoapSessionCtx(exchange, adaptor, processor, authService, timeout);
-
 
         AdaptorToSessionActorMsg msg;
         try {
@@ -118,6 +148,8 @@ public class CoapTransportResource extends CoapResource {
                     break;
                 case SUBSCRIBE_ATTRIBUTES_REQUEST:
                 case SUBSCRIBE_RPC_COMMANDS_REQUEST:
+                    ExchangeObserver systemObserver = (ExchangeObserver) observerField.get(advanced);
+                    advanced.setObserver(new CoapExchangeObserverProxy(systemObserver, ctx));
                     ctx.setSessionType(SessionType.ASYNC);
                     msg = adaptor.convertToActorMsg(ctx, type, request);
                     break;
@@ -136,11 +168,20 @@ public class CoapTransportResource extends CoapResource {
             log.debug("Failed to decode payload {}", e);
             exchange.respond(CoAP.ResponseCode.BAD_REQUEST, e.getMessage());
             return Optional.empty();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException  | IllegalAccessException e) {
             log.debug("Failed to process payload {}", e);
             exchange.respond(CoAP.ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return Optional.of(ctx.getSessionId());
+    }
+
+    private Optional<DeviceCredentialsFilter> decodeCredentials(Request request) {
+        List<String> uriPath = request.getOptions().getUriPath();
+        DeviceCredentialsFilter credentials = null;
+        if (uriPath.size() >= ACCESS_TOKEN_POSITION) {
+            credentials = new DeviceTokenCredentials(uriPath.get(ACCESS_TOKEN_POSITION - 1));
+        }
+        return Optional.ofNullable(credentials);
     }
 
     private Optional<FeatureType> getFeatureType(Request request) {
@@ -167,5 +208,8 @@ public class CoapTransportResource extends CoapResource {
         return Optional.empty();
     }
 
-
+    @Override
+    public Resource getChild(String name) {
+        return this;
+    }
 }
