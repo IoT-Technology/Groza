@@ -55,8 +55,6 @@ public abstract class BaseController {
     @Autowired
     protected DeviceService deviceService;
 
-    @Autowired
-    protected AuditLogService auditLogService;
 
     <T> T checkNotNull(T reference) throws GrozaException {
         if (reference == null) {
@@ -216,7 +214,6 @@ public abstract class BaseController {
 //        if (e == null) {
 //            pushEntityActionToRuleEngine(entityId, entity, user, customerId, actionType, additionalInfo);
 //        }
-        auditLogService.logEntityAction(user.getTenantId(), customerId, user.getId(), user.getName(), entityId, entity, actionType, e, additionalInfo);
     }
 
 
