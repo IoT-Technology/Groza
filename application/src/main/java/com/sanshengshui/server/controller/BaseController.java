@@ -19,6 +19,7 @@ import com.sanshengshui.server.dao.exception.IncorrectParameterException;
 import com.sanshengshui.server.dao.model.ModelConstants;
 import com.sanshengshui.server.dao.tenant.TenantService;
 import com.sanshengshui.server.service.security.model.SecurityUser;
+import com.sanshengshui.server.service.state.DeviceStateService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,11 @@ public abstract class BaseController {
 
     @Autowired
     protected DeviceService deviceService;
+
+    @Autowired
+    protected DeviceStateService deviceStateService;
+
+
 
 
     <T> T checkNotNull(T reference) throws GrozaException {

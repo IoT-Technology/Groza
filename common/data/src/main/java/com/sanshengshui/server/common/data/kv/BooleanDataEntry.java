@@ -7,7 +7,8 @@ import java.util.Optional;
  * @author james mu
  * @date 18-12-6 下午3:59
  */
-public class BooleanDataEntry extends BasicKvEntry{private final Boolean value;
+public class BooleanDataEntry extends BasicKvEntry{
+    private final Boolean value;
 
     public BooleanDataEntry(String key, Boolean value) {
         super(key);

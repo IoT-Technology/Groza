@@ -31,6 +31,30 @@ public class DeviceController extends BaseController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('TENANT_ADMIN', 'CUSTOMER_USER')")
+    @RequestMapping(value = "/device", method = RequestMethod.POST)
+    @ResponseBody
+    public Device saveDevice(@RequestBody Device device) throws GrozaException{
+        device.setTenantId(getCurrentUser().getTenantId());
+        if (getCurrentUser().getAuthority() == Authority.CUSTOMER_USER) {
+            if (device.getId() == null || device.getId().isNullUid() ||
+            device.getCustomerId() == null || device.getCustomerId().isNullUid()) {
+                throw new GrozaException("You don't have permission to perform this operation!",
+                        GrozaErrorCode.PERMISSION_DENIED);
+            } else {
+                checkCustomerId(device.getCustomerId());
+            }
+        }
+        Device savedDevice = checkNotNull(deviceService.saveDevice(device));
+
+        if (device.getId() == null) {
+            deviceStateService.onDeviceAdded(savedDevice);
+        } else {
+            deviceStateService.onDeviceUpdated(savedDevice);
+        }
+        return savedDevice;
+    }
+
     @PreAuthorize("hasAuthority('TENANT_ADMIN')")
     @RequestMapping(value = "/tenant/devices", params = {"limit"}, method = RequestMethod.GET)
     @ResponseBody
