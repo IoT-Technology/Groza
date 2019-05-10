@@ -71,6 +71,7 @@
         <spring-data-redis.version>1.8.10.RELEASE</spring-data-redis.version>
         <jedis.version>2.9.0</jedis.version>
         <jjwt.version>0.7.0</jjwt.version>
+        <pulsar.version>2.3.1</pulsar.version>
     </properties>
 
 
@@ -337,6 +338,16 @@
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>rest</artifactId>
             <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client-admin</artifactId>
+            <version>${pulsar.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client</artifactId>
+            <version>${pulsar.version}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.springframework.data</groupId>-->
