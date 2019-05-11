@@ -23,12 +23,13 @@
     <artifactId>groza</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>transport</module>
-        <module>application</module>
-        <module>common</module>
-        <module>dao</module>
-        <module>tools</module>
-        <module>ui</module>
+        <module>groza-transport</module>
+        <module>groza-application</module>
+        <module>groza-common</module>
+        <module>groza-dao</module>
+        <module>groza-tools</module>
+        <module>groza-ui</module>
+        <module>groza-rule-engine</module>
     </modules>
     <packaging>pom</packaging>
 
