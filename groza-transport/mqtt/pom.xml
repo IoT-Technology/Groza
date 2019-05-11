@@ -39,6 +39,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.sanshengshui</groupId>
+            <artifactId>rule-engine</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.sanshengshui.common</groupId>
             <artifactId>transport</artifactId>
             <version>1.0-SNAPSHOT</version>

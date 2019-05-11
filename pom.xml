@@ -87,6 +87,11 @@
     <dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>com.sanshengshui</groupId>
+            <artifactId>rule-engine</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sanshengshui.transport</groupId>
             <artifactId>http</artifactId>
             <version>1.0-SNAPSHOT</version>

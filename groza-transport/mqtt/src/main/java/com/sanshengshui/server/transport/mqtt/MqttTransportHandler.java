@@ -27,6 +27,7 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pulsar.client.api.PulsarClientException;
 import org.springframework.util.StringUtils;
 
 import javax.net.ssl.SSLPeerUnverifiedException;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import static com.sanshengshui.rule.engine.producers.producers.PulsarClient;
 import static com.sanshengshui.server.common.msg.session.SessionMsgType.*;
 import static com.sanshengshui.server.transport.mqtt.MqttTopics.*;
 import static io.netty.handler.codec.mqtt.MqttConnectReturnCode.*;
@@ -218,6 +220,11 @@ public class MqttTransportHandler extends ChannelInboundHandlerAdapter implement
 
     private void processDevicePublish(ChannelHandlerContext ctx, MqttPublishMessage mqttMsg, String topicName, int msgId) {
         AdaptorToSessionActorMsg msg = null;
+        try {
+            PulsarClient();
+        } catch (PulsarClientException e) {
+            e.printStackTrace();
+        }
         try {
             if (topicName.equals(DEVICE_TELEMETRY_TOPIC)) {
                 msg = adaptor.convertToActorMsg(deviceSessionCtx, POST_TELEMETRY_REQUEST, mqttMsg);
