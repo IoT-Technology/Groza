@@ -80,10 +80,10 @@ spring.mvc.cors:
 
 spring:
   datasource:
-    url: jdbc:postgresql://129.211.104.153:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: james
+    password: postgres
   jpa:
     properties:
       hibernate:
