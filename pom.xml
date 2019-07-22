@@ -73,6 +73,7 @@
         <jedis.version>2.9.0</jedis.version>
         <jjwt.version>0.7.0</jjwt.version>
         <pulsar.version>2.3.1</pulsar.version>
+        <caffeine.version>2.6.1</caffeine.version>
     </properties>
 
 
@@ -354,6 +355,11 @@
             <groupId>org.apache.pulsar</groupId>
             <artifactId>pulsar-client</artifactId>
             <version>${pulsar.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.springframework.data</groupId>-->
