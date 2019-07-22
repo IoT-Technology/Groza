@@ -36,6 +36,16 @@ public class JpaDeviceDao extends JpaAbstractSearchTextDao<DeviceEntity, Device>
     private DeviceRepository deviceRepository;
 
     @Override
+    protected Class<DeviceEntity> getEntityClass() {
+        return DeviceEntity.class;
+    }
+
+    @Override
+    protected CrudRepository<DeviceEntity, String> getCrudRepository() {
+        return deviceRepository;
+    }
+
+    @Override
     public List<Device> findDevicesByTenantId(UUID tenantId, TextPageLink pageLink) {
         return DaoUtil.convertDataList(
                 deviceRepository.findByTenantId(
@@ -121,13 +131,4 @@ public class JpaDeviceDao extends JpaAbstractSearchTextDao<DeviceEntity, Device>
         return list;
     }
 
-    @Override
-    protected Class<DeviceEntity> getEntityClass() {
-        return DeviceEntity.class;
-    }
-
-    @Override
-    protected CrudRepository<DeviceEntity, String> getCrudRepository() {
-        return deviceRepository;
-    }
 }

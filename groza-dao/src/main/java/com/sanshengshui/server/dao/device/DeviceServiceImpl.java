@@ -20,12 +20,15 @@ import com.sanshengshui.server.dao.tenant.TenantDao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
 
+import static com.sanshengshui.server.common.data.CacheConstants.DEVICE_CACHE;
 import static com.sanshengshui.server.dao.model.ModelConstants.NULL_UUID;
 import static com.sanshengshui.server.dao.service.Validator.validateId;
 
@@ -54,6 +57,8 @@ public class DeviceServiceImpl implements DeviceService{
     @Autowired
     private DeviceCredentialsService deviceCredentialsService;
 
+    @Autowired
+    private CacheManager cacheManager;
 
 
     @Override
@@ -70,6 +75,7 @@ public class DeviceServiceImpl implements DeviceService{
         return deviceDao.findByIdAsync(deviceId.getId());
     }
 
+    @Cacheable(cacheNames = DEVICE_CACHE, key = "{#tenantId, #name}")
     @Override
     public Device findDeviceByTenantIdAndName(TenantId tenantId, String name) {
         log.trace("Executing findDeviceByTenantIdAndName [{}][{}]", tenantId, name);
