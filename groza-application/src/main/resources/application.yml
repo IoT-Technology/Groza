@@ -14,7 +14,7 @@ mqtt:
   # Enable/disable mqtt transport protocol.
   enabled: true
   bind_address: 0.0.0.0
-  bind_port: 1883
+  bind_port: 1884
   adaptor: JsonMqttAdaptor
   timeout: 10000
   netty:
@@ -45,6 +45,30 @@ coap:
   adaptor: JsonCoapAdaptor
   timeout: 10000
 
+cache:
+  # caffeine or redis
+  type: "${CACHE_TYPE:caffeine}"
+
+caffeine:
+  specs:
+    relations:
+      timeToLiveInMinutes: 1440
+      maxSize: 100000
+    deviceCredentials:
+      timeToLiveInMinutes: 1440
+      maxSize: 100000
+    devices:
+       timeToLiveInMinutes: 1440
+       maxSize: 100000
+
+redis:
+  # standalone or cluster
+  connection:
+    type: standalone
+    host: "${REDIS_HOST:localhost}"
+    port: "${REDIS_PORT:6379}"
+    db: "#{REDIS_DB:0}"
+    password: "{REDIS_PASSWORD:}"
 
 database:
   type: sql # sql OR mongodb
@@ -80,10 +104,10 @@ spring.mvc.cors:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://129.211.104.153:5432/thingsboard
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: postgres
+    password: james
   jpa:
     properties:
       hibernate:
