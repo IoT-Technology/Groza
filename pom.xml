@@ -28,7 +28,6 @@
         <module>groza-common</module>
         <module>groza-dao</module>
         <module>groza-tools</module>
-        <module>groza-ui</module>
         <module>groza-rule-engine</module>
     </modules>
     <packaging>pom</packaging>
