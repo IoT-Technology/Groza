@@ -21,11 +21,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>transport</artifactId>
-        <groupId>com.sanshengshui</groupId>
+        <groupId>iot.technology</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.sanshengshui.transport</groupId>
+    <groupId>iot.technology.transport</groupId>
     <artifactId>mqtt</artifactId>
     <packaging>jar</packaging>
 
@@ -39,16 +39,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.sanshengshui</groupId>
+            <groupId>iot.technology</groupId>
             <artifactId>rule-engine</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sanshengshui.common</groupId>
+            <groupId>iot.technology.common</groupId>
             <artifactId>transport</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.sanshengshui</groupId>
+            <groupId>iot.technology</groupId>
             <artifactId>dao</artifactId>
         </dependency>
         <dependency>

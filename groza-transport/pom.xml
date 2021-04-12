@@ -26,10 +26,10 @@
     </modules>
     <parent>
         <artifactId>groza</artifactId>
-        <groupId>com.sanshengshui</groupId>
+        <groupId>iot.technology</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.sanshengshui</groupId>
+    <groupId>iot.technology</groupId>
     <artifactId>transport</artifactId>
     <packaging>pom</packaging>
 
