@@ -1,23 +1,23 @@
 package iot.technology.server.transport.mqtt;
 
 
-import iot.technology.server.common.transport.SessionMsgProcessor;
-import iot.technology.server.common.transport.auth.DeviceAuthService;
-import iot.technology.server.common.transport.quota.host.HostRequestsQuotaService;
-import iot.technology.server.dao.device.DeviceService;
-import iot.technology.server.dao.relation.RelationService;
-import iot.technology.server.transport.mqtt.adaptors.MqttTransportAdaptor;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.*;
+import io.netty.channel.Channel;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.ResourceLeakDetector;
+import iot.technology.server.common.transport.SessionMsgProcessor;
+import iot.technology.server.common.transport.auth.DeviceAuthService;
+import iot.technology.server.common.transport.quota.host.HostRequestsQuotaService;
+import iot.technology.server.transport.mqtt.adaptors.MqttTransportAdaptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -39,19 +39,12 @@ public class MqttTransprotService {
     @Autowired(required = false)
     private SessionMsgProcessor processor;
 
-    @Autowired(required = false)
-    private DeviceService deviceService;
 
     @Autowired(required = false)
-
     private DeviceAuthService authService;
 
-    @Autowired(required = false)
-
-    private RelationService relationService;
 
     @Autowired(required = false)
-
     private MqttSslHandlerProvider sslHandlerProvider;
 
     @Autowired(required = false)
@@ -99,7 +92,7 @@ public class MqttTransprotService {
         ServerBootstrap b = new ServerBootstrap();
         b.group(bossGroup, workerGroup)//设置使用的EventLoopGroup
                 .channel(NioServerSocketChannel.class)//设置要被实例化的为NioServerSocketChannel类
-                .childHandler(new MqttTransportServerInitializer(processor, deviceService, authService, relationService,
+                .childHandler(new MqttTransportServerInitializer(processor, authService, relationService,
                         adaptor, sslHandlerProvider, quotaService, maxPayloadSize));//设置连入服务端的Client的SocketChannel的处理器
         /**
          * 绑定端口，并同步等待成功，即启动服务器
