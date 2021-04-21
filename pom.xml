@@ -26,6 +26,8 @@
 
     <modules>
         <module>groza-transport-mqtt</module>
+        <module>groza-transport-coap</module>
+        <module>groza-application</module>
     </modules>
 
     <name>Groza :: Server</name>
