@@ -30,7 +30,7 @@
     <artifactId>groza-transport-coap</artifactId>
     <packaging>jar</packaging>
 
-    <name>Groza :: Transport :: CoAP</name>
+    <name>Groza :: Server :: Transport :: CoAP</name>
     <url>https://www.groza.com</url>
 
     <properties>
