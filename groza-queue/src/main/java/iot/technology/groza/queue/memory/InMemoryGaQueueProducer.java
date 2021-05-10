@@ -11,6 +11,14 @@ import iot.technology.groza.queue.common.TopicPartitionInfo;
  */
 public class InMemoryGaQueueProducer<T extends GaQueueMsg> implements GaQueueProducer<T> {
 
+    private final InMemoryStorage storage = InMemoryStorage.getInstance();
+
+    private final String defaultTopic;
+
+    public InMemoryGaQueueProducer(String defaultTopic) {
+        this.defaultTopic = defaultTopic;
+    }
+
     @Override
     public void init() {
 
@@ -23,7 +31,16 @@ public class InMemoryGaQueueProducer<T extends GaQueueMsg> implements GaQueuePro
 
     @Override
     public void send(TopicPartitionInfo tpi, T msg, GaQueueCallback callback) {
-
+        boolean result = storage.put(tpi.getFullTopicName(), msg);
+        if (result) {
+            if (callback != null) {
+                callback.onSuccess(null);
+            }
+        } else {
+            if (callback != null) {
+                callback.onFailure(new RuntimeException("Failure add msg to InMemoryQueue"));
+            }
+        }
     }
 
     @Override
