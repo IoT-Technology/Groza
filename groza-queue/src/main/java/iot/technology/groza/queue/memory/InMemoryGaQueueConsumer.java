@@ -1,8 +1,8 @@
 package iot.technology.groza.queue.memory;
 
+import iot.technology.groza.msg.queue.TopicPartitionInfo;
 import iot.technology.groza.queue.GaQueueConsumer;
 import iot.technology.groza.queue.GaQueueMsg;
-import iot.technology.groza.queue.common.TopicPartitionInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;

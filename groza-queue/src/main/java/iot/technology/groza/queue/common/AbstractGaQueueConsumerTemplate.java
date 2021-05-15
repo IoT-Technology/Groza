@@ -1,5 +1,6 @@
 package iot.technology.groza.queue.common;
 
+import iot.technology.groza.msg.queue.TopicPartitionInfo;
 import iot.technology.groza.queue.GaQueueConsumer;
 import iot.technology.groza.queue.GaQueueMsg;
 import lombok.Getter;

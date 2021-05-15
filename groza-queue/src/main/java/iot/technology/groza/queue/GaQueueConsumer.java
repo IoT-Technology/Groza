@@ -1,6 +1,6 @@
 package iot.technology.groza.queue;
 
-import iot.technology.groza.queue.common.TopicPartitionInfo;
+import iot.technology.groza.msg.queue.TopicPartitionInfo;
 
 import java.util.List;
 import java.util.Set;

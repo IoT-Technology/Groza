@@ -1,9 +1,9 @@
 package iot.technology.groza.queue.memory;
 
+import iot.technology.groza.msg.queue.TopicPartitionInfo;
 import iot.technology.groza.queue.GaQueueCallback;
 import iot.technology.groza.queue.GaQueueMsg;
 import iot.technology.groza.queue.GaQueueProducer;
-import iot.technology.groza.queue.common.TopicPartitionInfo;
 
 /**
  * @author mushuwei

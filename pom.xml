@@ -29,6 +29,7 @@
         <module>groza-transport-coap</module>
         <module>groza-application</module>
         <module>groza-queue</module>
+        <module>groza-message</module>
     </modules>
 
     <name>Groza :: Server</name>
@@ -86,6 +87,11 @@
 
     <dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>iot.technology</groupId>
+            <artifactId>groza-message</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>

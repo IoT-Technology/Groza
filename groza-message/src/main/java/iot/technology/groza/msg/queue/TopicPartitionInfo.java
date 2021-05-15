@@ -1,4 +1,4 @@
-package iot.technology.groza.queue.common;
+package iot.technology.groza.msg.queue;
 
 import lombok.Builder;
 import lombok.Getter;
