@@ -24,16 +24,21 @@ public class GaKafkaConsumerTemplate<T extends GaQueueMsg> extends AbstractGaQue
     private final KafkaConsumer<String, byte[]> consumer;
     private final GaKafkaDecoder<T> decoder;
 
+    private final GaKafkaConsumerStatsService statsService;
     private final String groupId;
 
     private GaKafkaConsumerTemplate(GaKafkaSettings settings, GaKafkaDecoder<T> decoder,
                                     String clientId, String groupId, String topic,
-                                    GaQueueAdmin admin) {
+                                    GaQueueAdmin admin, GaKafkaConsumerStatsService statsService) {
         super(topic);
         Properties props = settings.toConsumerProps();
         props.put(ConsumerConfig.CLIENT_ID_CONFIG, clientId);
         if (groupId != null) {
             props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
+        }
+        this.statsService = statsService;
+        if (statsService != null) {
+            statsService.registerClientGroup(groupId);
         }
         this.groupId = groupId;
         this.admin = admin;
@@ -79,6 +84,9 @@ public class GaKafkaConsumerTemplate<T extends GaQueueMsg> extends AbstractGaQue
         if (consumer != null) {
             consumer.unsubscribe();
             consumer.close();
+        }
+        if (statsService != null) {
+            statsService.unregisterClientGroup(groupId);
         }
     }
 }
