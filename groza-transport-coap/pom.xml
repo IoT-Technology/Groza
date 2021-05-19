@@ -81,7 +81,14 @@
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>iot.technology</groupId>
+            <artifactId>groza-message</artifactId>
+        </dependency>
     </dependencies>
-
 
 </project>

@@ -1,0 +1,32 @@
+syntax = "proto3";
+package message;
+
+option java_package = "iot.technology.groza.msg.queue.gen";
+option java_outer_classname = "TransportProtos";
+
+enum KeyValueType {
+  BOOLEAN_V = 0;
+  LONG_V = 1;
+  DOUBLE_V = 2;
+  STRING_V = 3;
+  JSON_V = 4;
+}
+
+message KeyValueProto {
+  string key = 1;
+  KeyValueType type = 2;
+  bool bool_v = 3;
+  int64 long_v = 4;
+  double double_v = 5;
+  string string_v = 6;
+  string json_v = 7;
+}
+
+message TsKvListProto {
+  int64 ts = 1;
+  repeated KeyValueProto kv = 2;
+}
+
+message PostTelemetryMsg {
+  repeated TsKvListProto tsKvList = 1;
+}
