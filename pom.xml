@@ -30,6 +30,7 @@
         <module>groza-application</module>
         <module>groza-queue</module>
         <module>groza-message</module>
+        <module>groza-dao</module>
     </modules>
 
     <name>Groza :: Server</name>
