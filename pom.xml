@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2018-2021 The Groza Authors
+    Copyright © 2018-2022 The Groza Authors
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -34,7 +34,8 @@
     </modules>
 
     <name>Groza :: Server</name>
-    <url>https://iot.mushuwei.cn/</url>
+    <url>https://iot.mus
+        huwei.cn/</url>
     <inceptionYear>2018</inceptionYear>
 
     <properties>
