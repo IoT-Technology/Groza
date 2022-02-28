@@ -59,7 +59,7 @@
         <commons-lang3.version>3.4</commons-lang3.version>
         <gson.version>2.6.2</gson.version>
         <protobuf.version>3.11.4</protobuf.version>
-        <grpc.version>1.22.1</grpc.version>
+        <grpc.version>1.42.1</grpc.version>
         <mysql.version>8.0.16</mysql.version>
         <postgresql.driver.version>9.4.1211</postgresql.driver.version>
         <cassandra.version>3.5.0</cassandra.version>
@@ -441,7 +441,7 @@
                     -->
                     <protocArtifact>com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.0.0:exe:${os.detected.classifier}</pluginArtifact>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                 </configuration>
                 <executions>
                     <execution>

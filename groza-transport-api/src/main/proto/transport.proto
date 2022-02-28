@@ -1,0 +1,12 @@
+syntax = "proto3";
+package transportapi;
+
+option java_package = "iot.technology.server.gen.transport";
+option java_outer_classname = "TransportApiProtos";
+
+import "queue.proto";
+
+message TelemetryMsg {
+  string deviceName = 1;
+  transport.PostTelemetryMsg msg = 2;
+}
