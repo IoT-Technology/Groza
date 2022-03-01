@@ -87,7 +87,7 @@
         </dependency>
         <dependency>
             <groupId>iot.technology</groupId>
-            <artifactId>groza-message</artifactId>
+            <artifactId>groza-transport-api</artifactId>
         </dependency>
     </dependencies>
 

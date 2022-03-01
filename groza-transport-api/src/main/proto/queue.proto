@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package transport;
 
-option java_package = "iot.technology.server.gen.transport";
+option java_package = "iot.technology.groza.server.gen.transport";
 option java_outer_classname = "TransportProtos";
 
 enum KeyValueType {

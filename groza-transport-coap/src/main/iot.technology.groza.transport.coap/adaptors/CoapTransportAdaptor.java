@@ -1,7 +1,7 @@
 package adaptors;
 
 import com.google.protobuf.Descriptors;
-import iot.technology.groza.msg.queue.gen.TransportProtos;
+import iot.technology.server.gen.transport.TransportProtos;
 import org.eclipse.californium.core.coap.Request;
 
 /**

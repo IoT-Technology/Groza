@@ -32,11 +32,11 @@
         <module>groza-message</module>
         <module>groza-dao</module>
         <module>groza-transport-api</module>
+        <module>groza-data</module>
     </modules>
 
     <name>Groza :: Server</name>
-    <url>https://iot.mus
-        huwei.cn/</url>
+    <url>https://iot.mushuwei.cn/</url>
     <inceptionYear>2018</inceptionYear>
 
     <properties>
@@ -45,9 +45,10 @@
         <main.dir>${basedir}</main.dir>
         <java.version>1.8</java.version>
         <netty-all.version>4.1.42.Final</netty-all.version>
+        <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
         <hutool.version>4.1.6</hutool.version>
         <spring-boot.version>2.3.9.RELEASE</spring-boot.version>
-        <spring.version>5.2.10.RELEASE</spring.version>
+        <spring.version>5.2.16.RELEASE</spring.version>
         <lombok.version>1.16.18</lombok.version>
         <slf4j.version>1.7.7</slf4j.version>
         <logback.version>1.2.3</logback.version>
@@ -94,6 +95,16 @@
         <dependency>
             <groupId>iot.technology</groupId>
             <artifactId>groza-message</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>iot.technology</groupId>
+            <artifactId>groza-transport-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>iot.technology</groupId>
+            <artifactId>groza-data</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -146,11 +157,6 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-data-mongodb</artifactId>-->
-            <!--<version>${spring-boot.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -351,22 +357,19 @@
             <artifactId>caffeine</artifactId>
             <version>${caffeine.version}</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.data</groupId>-->
-            <!--<artifactId>spring-data-redis</artifactId>-->
-            <!--<version>${spring-data-redis.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>redis.clients</groupId>-->
-            <!--<artifactId>jedis</artifactId>-->
-            <!--<version>${jedis.version}</version>-->
-        <!--</dependency>-->
     </dependencies>
     </dependencyManagement>
 
 
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin.version}</version>
+            </extension>
+        </extensions>
         <pluginManagement>
         <plugins>
             <plugin>
