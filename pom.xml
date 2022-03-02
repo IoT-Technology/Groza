@@ -44,12 +44,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <main.dir>${basedir}</main.dir>
         <java.version>1.8</java.version>
+        <javax-annotation.version>1.3.2</javax-annotation.version>
         <netty-all.version>4.1.42.Final</netty-all.version>
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
         <hutool.version>4.1.6</hutool.version>
         <spring-boot.version>2.3.9.RELEASE</spring-boot.version>
         <spring.version>5.2.16.RELEASE</spring.version>
-        <lombok.version>1.16.18</lombok.version>
+        <lombok.version>1.18.10</lombok.version>
         <slf4j.version>1.7.7</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <junit.version>4.12</junit.version>
@@ -106,6 +107,11 @@
             <groupId>iot.technology</groupId>
             <artifactId>groza-data</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>${javax-annotation.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
