@@ -1,7 +1,9 @@
 package adaptors;
 
 import com.google.protobuf.Descriptors;
-import iot.technology.server.gen.transport.TransportProtos;
+import iot.technology.groza.server.gen.transport.TransportProtos.PostAttributeMsg;
+import iot.technology.groza.server.gen.transport.TransportProtos.PostTelemetryMsg;
+import iot.technology.groza.server.transport.api.AdaptorException;
 import org.eclipse.californium.core.coap.Request;
 
 /**
@@ -9,6 +11,11 @@ import org.eclipse.californium.core.coap.Request;
  */
 public interface CoapTransportAdaptor {
 
-    TransportProtos.PostTelemetryMsg convertToPostTelemetry(String sessionId, Request inbound,
-                                                            Descriptors.Descriptor telemetryMsgDescriptor);
+    PostTelemetryMsg convertToPostTelemetry(String sessionId, Request inbound,
+                                            Descriptors.Descriptor telemetryMsgDescriptor) throws AdaptorException;
+
+    PostAttributeMsg convertToPostAttributes(String sessionId, Request inbound,
+                                             Descriptors.Descriptor attributeMsgDescriptor) throws AdaptorException;
+    
+
 }

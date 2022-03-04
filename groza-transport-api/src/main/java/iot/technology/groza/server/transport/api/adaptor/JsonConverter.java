@@ -2,10 +2,7 @@ package iot.technology.groza.server.transport.api.adaptor;
 
 import com.google.gson.*;
 import iot.technology.groza.server.data.kv.*;
-import iot.technology.groza.server.gen.transport.TransportProtos.KeyValueProto;
-import iot.technology.groza.server.gen.transport.TransportProtos.KeyValueType;
-import iot.technology.groza.server.gen.transport.TransportProtos.PostTelemetryMsg;
-import iot.technology.groza.server.gen.transport.TransportProtos.TsKvListProto;
+import iot.technology.groza.server.gen.transport.TransportProtos.*;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.math.BigDecimal;
@@ -33,6 +30,17 @@ public class JsonConverter {
 		PostTelemetryMsg.Builder builder = PostTelemetryMsg.newBuilder();
 		convertToTelemetry(jsonElement, ts, null, builder);
 		return builder.build();
+	}
+
+	public static PostAttributeMsg convertToAttributesProto(JsonElement jsonObject) throws JsonSyntaxException {
+		if (jsonObject.isJsonObject()) {
+			PostAttributeMsg.Builder result = PostAttributeMsg.newBuilder();
+			List<KeyValueProto> keyValueList = parseProtoValues(jsonObject.getAsJsonObject());
+			result.addAllKv(keyValueList);
+			return result.build();
+		} else {
+			throw new JsonSyntaxException(CAN_T_PARSE_VALUE + jsonObject);
+		}
 	}
 
 	public static PostTelemetryMsg convertToTelemetryProto(JsonElement jsonElement, long ts, String deviceId) throws JsonSyntaxException {
