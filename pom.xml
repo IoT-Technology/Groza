@@ -48,7 +48,7 @@
         <netty-all.version>4.1.42.Final</netty-all.version>
         <os-maven-plugin.version>1.7.0</os-maven-plugin.version>
         <hutool.version>4.1.6</hutool.version>
-        <spring-boot.version>2.3.9.RELEASE</spring-boot.version>
+        <spring-boot.version>2.5.12</spring-boot.version>
         <spring.version>5.2.16.RELEASE</spring.version>
         <lombok.version>1.18.10</lombok.version>
         <slf4j.version>1.7.7</slf4j.version>
