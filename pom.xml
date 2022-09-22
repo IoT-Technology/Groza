@@ -63,7 +63,7 @@
         <protobuf.version>3.11.4</protobuf.version>
         <grpc.version>1.42.1</grpc.version>
         <mysql.version>8.0.16</mysql.version>
-        <postgresql.driver.version>9.4.1211</postgresql.driver.version>
+        <postgresql.driver.version>42.3.7</postgresql.driver.version>
         <cassandra.version>3.5.0</cassandra.version>
         <springfox-swagger.version>2.9.2</springfox-swagger.version>
         <bouncycastle.version>1.60</bouncycastle.version>
